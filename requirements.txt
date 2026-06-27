@@ -1,0 +1,11 @@
+requests
+boto3
+python-dotenv
+pandas
+duckdb
+dbt-duckdb
+lightgbm
+scikit-learn
+shap
+streamlit
+apache-airflow
