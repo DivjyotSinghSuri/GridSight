@@ -20,3 +20,12 @@ HOURLY_VARIABLES = [
     "wind_speed_10m",
     "wind_direction_10m",
 ]
+
+OPEN_METEO_SOLAR_URL = "https://archive-api.open-meteo.com/v1/archive"
+
+SOLAR_VARIABLES = [
+    "shortwave_radiation",
+    "direct_radiation",
+    "diffuse_radiation",
+    "direct_normal_irradiance"
+]
