@@ -1,12 +1,19 @@
 import os
-import logging
+from logger import logger
 from datetime import datetime
-from config import LATITUDE, LONGITUDE, START_DATE, END_DATE, CITY
+from config import *
 
 import boto3
 import pandas as pd
 import requests
 from dotenv import load_dotenv
+
+s3 = boto3.client(
+    "s3",
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("AWS_DEFAULT_REGION")
+)
 
 def build_request():
   url = OPEN_METEO_URL
@@ -22,7 +29,7 @@ def build_request():
   return url, params
 
 def fetch_weather(url, params):
-  logging.info("Fetching historical weather data...")
+  logger.info("Fetching historical weather data...")
   
   response = requests.get(
     url,
@@ -40,7 +47,7 @@ def fetch_weather(url, params):
 
 def create_dataframe(data):
   df = pd.DataFrame(data["hourly"])
-  logging.info("Created DataFrame with {len(df)} rows.")
+  logger.info(f"Created DataFrame with {len(df)} rows.")
   return df
 
 def save_csv(df):
@@ -54,9 +61,49 @@ def save_csv(df):
     filepath,
     index=False
 )
-  logging.info(f"Saved weather data to {filepath}")
+  logger.info(f"Saved weather data to {filepath}")
   
   return filepath
 
 def upload_to_s3(filepath):
-  
+  filename = os.path.basename(filepath)
+  s3_key = (f"bronze/weather/openmeteo/{CITY}/historical/{filename}")
+    
+  s3.upload_file(
+      Filename=filepath,
+      Bucket=S3_BUCKET,
+      Key=s3_key)
+    
+  logger.info(f"Uploaded {filename} to s3://{S3_BUCKET}/{s3_key}")
+
+  os.remove(filepath)
+  logger.info(f"Deleted local file: {filepath}")
+
+  return s3_key
+
+def main():
+    try:
+      logger.info("Starting Open-Meteo historical ingestion...")
+
+      url, params = build_request()
+
+      data = fetch_weather(url, params)
+
+      df = create_dataframe(data)
+
+      filepath = save_csv(df)
+
+      s3_key = upload_to_s3(filepath)
+
+      logger.info("Open-Meteo historical ingestion completed successfully.")
+      logger.info(f"S3 Object: {s3_key}")
+    
+    except Exception as e:
+      logger.exception(f"Open-Meteo ingestion failed: {e}")
+    finally:
+      logger.info("Pipeline execution finished.")
+    
+      
+    
+if __name__ == "__main__":
+    main()

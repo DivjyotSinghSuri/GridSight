@@ -11,3 +11,12 @@ CITY = "jaisalmer"
 S3_BUCKET = "gridsight-raw"
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
+
+HOURLY_VARIABLES = [
+    "temperature_2m",
+    "relative_humidity_2m",
+    "precipitation",
+    "cloud_cover",
+    "wind_speed_10m",
+    "wind_direction_10m",
+]
