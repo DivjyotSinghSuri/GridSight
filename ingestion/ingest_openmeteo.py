@@ -2,6 +2,7 @@ import os
 from logger import logger
 from datetime import datetime
 from config import *
+from utils.grid import generate_grid
 
 import boto3
 import pandas as pd
@@ -15,15 +16,15 @@ s3 = boto3.client(
     region_name=os.getenv("AWS_DEFAULT_REGION")
 )
 
-def build_request():
-  url = OPEN_METEO_URL
+def build_request(lat, lon):
+  url = OPEN_METEO_WEATHER_URL
   
   params = {
-    "latitude": LATITUDE,
-    "longitude": LONGITUDE,
+    "latitude": lat,
+    "longitude": lon,
     "start_date": START_DATE,
     "end_date": END_DATE,
-    "hourly": ",".join(HOURLY_VARIABLES),
+    "hourly": ",".join(WEATHER_VARIABLES),
     "timezone": TIMEZONE
 }
   return url, params
@@ -50,11 +51,11 @@ def create_dataframe(data):
   logger.info(f"Created DataFrame with {len(df)} rows.")
   return df
 
-def save_csv(df):
+def save_csv(df, grid_id):
   start = START_DATE.replace("-", "_")
   end = END_DATE.replace("-", "_")
+
   filename = f"weather_historical_{start}_{end}.csv"
-  
   filepath = f"data/raw/{filename}"
   
   df.to_csv(
@@ -65,10 +66,12 @@ def save_csv(df):
   
   return filepath
 
-def upload_to_s3(filepath):
+def upload_to_s3(filepath, grid_id):
   filename = os.path.basename(filepath)
-  s3_key = (f"bronze/weather/openmeteo/{CITY}/historical/{filename}")
-    
+  s3_key = (
+    f"bronze/weather/openmeteo/{COUNTRY}/"
+    f"{grid_id}/{filename}"
+)  
   s3.upload_file(
       Filename=filepath,
       Bucket=S3_BUCKET,
@@ -82,28 +85,48 @@ def upload_to_s3(filepath):
   return s3_key
 
 def main():
+    logger.info("Starting Open-Meteo weather ingestion...")
+
+    grid_points = generate_grid()
+
+    successful_uploads = 0
+
     try:
-      logger.info("Starting Open-Meteo historical ingestion...")
+        for grid_id, lat, lon in grid_points:
 
-      url, params = build_request()
+            try:
+                logger.info(f"Processing {grid_id} ({lat}, {lon})")
 
-      data = fetch_weather(url, params)
+                url, params = build_request(lat, lon)
 
-      df = create_dataframe(data)
+                data = fetch_weather(url, params)
 
-      filepath = save_csv(df)
+                df = create_dataframe(data)
 
-      s3_key = upload_to_s3(filepath)
+                filepath = save_csv(df, grid_id)
 
-      logger.info("Open-Meteo historical ingestion completed successfully.")
-      logger.info(f"S3 Object: {s3_key}")
-    
+                s3_key = upload_to_s3(filepath, grid_id)
+
+                logger.info(f"{grid_id} uploaded successfully.")
+                logger.info(f"S3 Object: {s3_key}")
+
+                successful_uploads += 1
+
+            except Exception as e:
+                logger.exception(f"{grid_id} failed: {e}")
+                continue
+
+        logger.info(
+            f"Weather ingestion completed. Successfully uploaded "
+            f"{successful_uploads}/{len(grid_points)} grid points."
+        )
+
     except Exception as e:
-      logger.exception(f"Open-Meteo ingestion failed: {e}")
+        logger.exception(f"Weather ingestion failed: {e}")
+
     finally:
-      logger.info("Pipeline execution finished.")
-    
-      
-    
+        logger.info("Pipeline execution finished.")
+
+
 if __name__ == "__main__":
     main()
