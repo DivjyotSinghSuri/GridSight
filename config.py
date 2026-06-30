@@ -38,4 +38,4 @@ SOLAR_VARIABLES = [
 
 ENTSOE_URL = "https://web-api.tp.entsoe.eu/api"
 
-ENTSOE_DOMAIN = "10Y1001A1001A83F"  # Germany-Luxembourg bidding zone
+ENTSOE_DOMAIN = "10Y1001A1001A83F"  
