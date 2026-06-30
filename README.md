@@ -1,99 +1,259 @@
 # GridSight
 
-> A cloud-assisted ELT platform for renewable energy forecasting using AWS S3, DuckDB, dbt, Apache Airflow, and LightGBM.
+A cloud-native renewable energy analytics platform that ingests, transforms, and forecasts country-scale solar generation using modern data engineering and machine learning practices.
 
-## Overview
+GridSight follows an ELT architecture to collect meteorological and power system data, build analytical datasets, and train forecasting models.
 
-GridSight is an end-to-end data engineering and machine learning platform designed to forecast renewable energy generation using weather and irradiance data.
+---
 
-The project follows a modern ELT architecture where raw data is ingested into Amazon S3, transformed using dbt on DuckDB, and used to train machine learning models for next-day solar and wind generation forecasting.
+## Features
 
-The project also includes analytics dashboards, workflow orchestration with Apache Airflow, and an optional REST API for serving predictions.
+- Automated weather ingestion using Open-Meteo
+- Automated solar irradiance ingestion using Open-Meteo
+- Historical generation ingestion using ENTSO-E *(In Progress)*
+- Amazon S3 Bronze Data Lake
+- DuckDB analytical warehouse
+- dbt transformation layer
+- Feature engineering pipeline
+- LightGBM forecasting model
+- Apache Airflow orchestration
+- Streamlit dashboard
 
 ---
 
 ## Architecture
 
 ```
-External APIs
-        │
-        ▼
-Python Ingestion Scripts
-        │
-        ▼
-AWS S3 (Raw Data)
-        │
-        ▼
-DuckDB
-        │
-        ▼
-dbt Transformations
-        │
-        ▼
-Star Schema
-        │
-        ▼
-Feature Engineering
-        │
-        ▼
-Machine Learning
-        │
-        ▼
-Analytics Dashboard
+                    Open-Meteo API
+                  (Weather + Irradiance)
+                           │
+                           ▼
+                 Germany Spatial Grid
+                     (5 × 5 Sampling)
+                           │
+                           ▼
+                  Amazon S3 Bronze Layer
+                           │
+                           ▼
+                        DuckDB
+                           │
+                           ▼
+                     dbt Transformations
+                    Bronze → Silver → Gold
+                           │
+                           ▼
+                  Feature Engineering
+                           │
+                           ▼
+                  LightGBM Forecast Model
+                           │
+                           ▼
+                  Streamlit Dashboard
 ```
 
 ---
 
 ## Technology Stack
 
-| Category | Technologies |
-|-----------|--------------|
-| Programming | Python, SQL |
-| Data Lake | AWS S3 |
+| Layer | Technology |
+|--------|------------|
+| Language | Python |
+| Weather Data | Open-Meteo API |
+| Irradiance Data | Open-Meteo API |
+| Generation Data | ENTSO-E API |
+| Storage | Amazon S3 |
 | Data Warehouse | DuckDB |
-| Transformations | dbt Core |
-| Workflow | Apache Airflow |
-| Machine Learning | LightGBM, Scikit-learn |
+| Transformations | dbt |
+| Orchestration | Apache Airflow |
+| Machine Learning | LightGBM |
 | Dashboard | Streamlit |
-| Deployment | FastAPI, Docker |
 
 ---
 
-## Planned Features
-
-- Automated data ingestion from multiple APIs
-- ELT pipeline using AWS S3 and DuckDB
-- Star schema dimensional modeling with dbt
-- Feature engineering for renewable forecasting
-- Multiple forecasting model comparison
-- SHAP explainability
-- Interactive analytics dashboard
-- Airflow workflow orchestration
-- Optional FastAPI deployment
-
----
-
-## Repository Structure
+## Project Structure
 
 ```
 GridSight/
-
+│
 ├── ingestion/
-├── airflow/
-├── dbt_project/
-├── ml/
-├── dashboard/
-├── notebooks/
+│   ├── ingest_weather.py
+│   ├── ingest_irradiance.py
+│   └── ingest_entsoe.py
+│
+├── utils/
+│   └── grid.py
+│
 ├── data/
+│   └── raw/
+│
+├── gridsight_dbt/
+│
 ├── docs/
-├── tests/
-├── .env.example
+│
+├── logs/
+│
+├── config.py
+├── logger.py
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## Status
+## Data Pipeline
 
-🚧 Currently under development.
+### Weather
+
+Open-Meteo API
+
+↓
+
+Germany 5×5 Spatial Grid
+
+↓
+
+Amazon S3 Bronze
+
+---
+
+### Solar Irradiance
+
+Open-Meteo Solar API
+
+↓
+
+Germany 5×5 Spatial Grid
+
+↓
+
+Amazon S3 Bronze
+
+---
+
+### Generation *(In Progress)*
+
+ENTSO-E
+
+↓
+
+Amazon S3 Bronze
+
+---
+
+### Transformations
+
+Bronze
+
+↓
+
+DuckDB
+
+↓
+
+dbt
+
+↓
+
+Silver
+
+↓
+
+Gold
+
+---
+
+### Forecasting
+
+Gold Dataset
+
+↓
+
+Feature Engineering
+
+↓
+
+LightGBM
+
+↓
+
+Predicted Solar Generation
+
+---
+
+## Data Sources
+
+| Dataset | Source | Resolution |
+|----------|--------|------------|
+| Weather | Open-Meteo | Hourly |
+| Solar Irradiance | Open-Meteo | Hourly |
+| Solar Generation | ENTSO-E | Hourly |
+
+---
+
+## Current Progress
+
+### Completed
+
+- [x] Germany spatial grid generation
+- [x] Weather ingestion pipeline
+- [x] Solar irradiance ingestion pipeline
+- [x] Amazon S3 Bronze Layer
+- [x] Structured logging
+- [x] Modular ingestion architecture
+
+### In Progress
+
+- [ ] ENTSO-E generation ingestion
+- [ ] DuckDB warehouse
+- [ ] dbt transformations
+- [ ] Feature engineering
+- [ ] LightGBM forecasting
+- [ ] Apache Airflow
+- [ ] Streamlit dashboard
+
+---
+
+## Roadmap
+
+### Phase 1 — Data Ingestion
+
+- Weather ingestion
+- Irradiance ingestion
+- Generation ingestion
+
+### Phase 2 — Data Engineering
+
+- DuckDB
+- dbt models
+- Silver layer
+- Gold layer
+
+### Phase 3 — Machine Learning
+
+- Feature engineering
+- LightGBM
+- Model evaluation
+
+### Phase 4 — Production
+
+- Airflow scheduling
+- Streamlit dashboard
+- Model monitoring
+
+---
+
+## Future Improvements
+
+- Capacity-weighted weather aggregation
+- Polygon-based Germany spatial sampling
+- Wind generation forecasting
+- Automated model retraining
+- Data quality monitoring
+- Docker deployment
+- CI/CD pipeline
+
+---
+
+## License
+
+This project is licensed under the MIT License.
