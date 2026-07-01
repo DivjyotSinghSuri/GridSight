@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 COUNTRY = "germany"
 
 TIMEZONE = "Europe/Berlin"
@@ -36,6 +39,12 @@ SOLAR_VARIABLES = [
     "direct_normal_irradiance"
 ]
 
-ENTSOE_URL = "https://web-api.tp.entsoe.eu/api"
+load_dotenv()
+ENTSOE_API_KEY = os.getenv("ENTSOE_API_KEY")
 
-ENTSOE_DOMAIN = "10Y1001A1001A83F"  
+ENTSOE_ENDPOINT = "https://web-api.tp.entsoe.eu/api"
+
+GERMANY_DOMAIN = "10Y1001A1001A83F"
+
+DOCUMENT_TYPE = "A75"
+PROCESS_TYPE = "A16"
