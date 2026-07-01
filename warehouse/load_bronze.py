@@ -18,12 +18,18 @@ CREATE OR REPLACE SECRET gridsight_s3 (
 );
 """)
 
-with open("warehouse/queries/bronze_irradiance.sql") as f:
+with open("warehouse/queries/bronze_generation.sql") as f:
     conn.execute(f.read())
-result = conn.execute("""
-DESCRIBE bronze_irradiance;
-""").fetchdf()
+    
+print(conn.execute("""
+SELECT COUNT(*) FROM bronze_generation;
+""").fetchone()
+)
 
-print(result)
+print(conn.execute("""
+DESCRIBE bronze_generation;
+""").fetchdf()
+)
+
 
 conn.close()
