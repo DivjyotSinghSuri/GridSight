@@ -2,11 +2,12 @@
 
 WITH irradiance AS (
   SELECT time AS timestamp,
-  shortwave_radiation,
-  direct_radiation,
-  diffuse_radiation,
-  direct_normal_irradiance
+  AVG(shortwave_radiation) AS shortwave_radiation,
+  AVG(direct_radiation) AS direct_radiation,
+  AVG(diffuse_radiation) AS diffuse_radiation,
+  AVG(direct_normal_irradiance) AS direct_normal_irradiance
   FROM bronze_irradiance
+  GROUP BY timestamp
 )
 
 SELECT * 

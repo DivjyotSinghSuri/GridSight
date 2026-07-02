@@ -20,7 +20,7 @@ hourly_generation AS (
         DATE_TRUNC('hour', timestamp) AS timestamp,
         AVG(generation_mw) AS solar_generation_mw
     FROM solar_generation
-    GROUP BY timestamp
+    GROUP BY DATE_TRUNC('hour', timestamp)
 )
 
 SELECT *
