@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: gold_training_dataset
+    description: "ML-ready feature table for hourly solar generation forecasting in Germany."
+    columns:
+      - name: timestamp
+        data_tests:
+          - unique
+          - not_null
+
+      - name: solar_generation_mw
+        description: "Target variable representing hourly solar generation in megawatts."
+        data_tests:
+          - not_null 
+
+      - name: solar_generation_mw_lag_168h
+        description: Solar generation 168 hours before the current timestamp.
+        data_tests:
+          - not_null
+
+      - name: is_daylight
+        description: "Indicator showing whether the timestamp falls between sunrise and sunset."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0,1]
+      
+      - name: is_weekend
+        description: "Indicator showing whether the observation falls on a weekend."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0,1]
+
+      - name: daylight_progress_pct
+        description: "Normalized progress through the daylight period, ranging from 0 to 1."
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1

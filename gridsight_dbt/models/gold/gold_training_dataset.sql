@@ -26,7 +26,7 @@ generation AS (
 daylight AS (
   SELECT * 
   FROM {{ ref('stg_daylight') }}
-)
+),
 
 feature_table AS (
 
@@ -34,20 +34,23 @@ feature_table AS (
         g.timestamp,
         g.solar_generation_mw,
 
-        -- Weather
+        -- Weather Features 
+
         w.temperature_c,
         w.relative_humidity_pct,
         w.precipitation_mm,
         w.cloud_cover_pct,
         w.wind_speed_kmh,
 
-        -- Irradiance
+        -- Irradiance Features
+
         i.shortwave_radiation,
         i.direct_radiation,
         i.diffuse_radiation,
         i.direct_normal_irradiance,
 
-        -- Calendar
+        -- Calendar Features 
+
         EXTRACT(HOUR FROM g.timestamp) AS hour,
         EXTRACT(MONTH FROM g.timestamp) AS month,
         EXTRACT(ISODOW FROM g.timestamp) AS day_of_week,
@@ -61,6 +64,7 @@ feature_table AS (
         EXTRACT(YEAR FROM g.timestamp) AS year,
 
         -- Lag Features
+
         {% for lag in lags %}
         LAG(g.solar_generation_mw, {{ lag }})
             OVER (ORDER BY g.timestamp)
@@ -83,11 +87,6 @@ feature_table AS (
 
         AVG(g.solar_generation_mw) OVER (
             ORDER BY g.timestamp
-            ROWS BETWEEN 12 PRECEDING AND 1 PRECEDING
-        ) AS solar_generation_mw_roll_mean_12h,
-
-        AVG(g.solar_generation_mw) OVER (
-            ORDER BY g.timestamp
             ROWS BETWEEN 24 PRECEDING AND 1 PRECEDING
         ) AS solar_generation_mw_roll_mean_24h,
 
@@ -102,11 +101,6 @@ feature_table AS (
             ORDER BY g.timestamp
             ROWS BETWEEN 6 PRECEDING AND 1 PRECEDING
         ) AS solar_generation_mw_roll_std_6h,
-
-        STDDEV_SAMP(g.solar_generation_mw) OVER (
-            ORDER BY g.timestamp
-            ROWS BETWEEN 12 PRECEDING AND 1 PRECEDING
-        ) AS solar_generation_mw_roll_std_12h,
 
         STDDEV_SAMP(g.solar_generation_mw) OVER (
             ORDER BY g.timestamp
@@ -127,11 +121,6 @@ feature_table AS (
 
         MIN(g.solar_generation_mw) OVER (
             ORDER BY g.timestamp
-            ROWS BETWEEN 12 PRECEDING AND 1 PRECEDING
-        ) AS solar_generation_mw_roll_min_12h,
-
-        MIN(g.solar_generation_mw) OVER (
-            ORDER BY g.timestamp
             ROWS BETWEEN 24 PRECEDING AND 1 PRECEDING
         ) AS solar_generation_mw_roll_min_24h,
 
@@ -146,11 +135,6 @@ feature_table AS (
             ORDER BY g.timestamp
             ROWS BETWEEN 6 PRECEDING AND 1 PRECEDING
         ) AS solar_generation_mw_roll_max_6h,
-
-        MAX(g.solar_generation_mw) OVER (
-            ORDER BY g.timestamp
-            ROWS BETWEEN 12 PRECEDING AND 1 PRECEDING
-        ) AS solar_generation_mw_roll_max_12h,
 
         MAX(g.solar_generation_mw) OVER (
             ORDER BY g.timestamp
@@ -182,7 +166,7 @@ feature_table AS (
                   1.0
               )
           ELSE 0
-        END AS daylight_progress_pct,,
+        END AS daylight_progress_pct,
 
         -- Interaction Features
 
@@ -192,7 +176,10 @@ feature_table AS (
         (
           CASE
             WHEN d.daylight_duration_hours > 0 THEN
-                LEAST(...)
+                LEAST(
+                  GREATEST(
+                    datediff('minute', d.sunrise, g.timestamp),
+                    0) / (d.daylight_duration_hours * 60.0),1.0)
             ELSE 0
           END) * i.shortwave_radiation AS daylight_progress_shortwave_interaction -- Hypothesis: The same irradiance level may have different implications depending on where you are in the daylight cycle.
 
