@@ -60,7 +60,97 @@ feature_table AS (
         LAG(g.solar_generation_mw, {{ lag }})
             OVER (ORDER BY g.timestamp)
             AS solar_generation_mw_lag_{{ lag }}h{% if not loop.last %},{% endif %}
-        {% endfor %}
+        {% endfor %},
+
+        -- Rolling Features
+
+        -- ROLLING MEAN
+
+        AVG(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_mean_3h,
+
+        AVG(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 6 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_mean_6h,
+
+        AVG(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 12 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_mean_12h,
+
+        AVG(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 24 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_mean_24h,
+
+        -- ROLLING STANDARD DEVIATION
+
+        STDDEV_SAMP(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_std_3h,
+
+        STDDEV_SAMP(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 6 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_std_6h,
+
+        STDDEV_SAMP(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 12 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_std_12h,
+
+        STDDEV_SAMP(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 24 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_std_24h,
+
+        -- ROLLING MINIMUM
+
+        MIN(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_min_3h,
+
+        MIN(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 6 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_min_6h,
+
+        MIN(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 12 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_min_12h,
+
+        MIN(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 24 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_min_24h,
+
+        -- ROLLING MAXIMUM
+
+        MAX(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_max_3h,
+
+        MAX(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 6 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_max_6h,
+
+        MAX(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 12 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_max_12h,
+
+        MAX(g.solar_generation_mw) OVER (
+            ORDER BY g.timestamp
+            ROWS BETWEEN 24 PRECEDING AND 1 PRECEDING
+        ) AS solar_generation_mw_roll_max_24h
 
     FROM generation AS g
 
