@@ -48,3 +48,13 @@ GERMANY_DOMAIN = "10Y1001A1001A83F"
 
 DOCUMENT_TYPE = "A75"
 PROCESS_TYPE = "A16"
+
+GERMANY_LAT = 51.1657
+GERMANY_LON = 10.4515
+
+DAYLIGHT_VARIABLES = [
+    "sunrise",
+    "sunset",
+    "daylight_duration",
+    "sunshine_duration"
+]
