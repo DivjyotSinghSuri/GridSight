@@ -265,3 +265,12 @@ How much did it improve performance?
 If one of those cannot be answered, reconsider adding it.
 
 Validate the grain of every dataset before joining. All tables participating in a join should represent the same business grain (e.g., one row per hour) unless a deliberate many-to-one or one-to-many relationship is intended.
+
+Version	New Feature Group	Why Added	Hypothesis
+V0	Historical generation	Baseline	Persistence captures temporal dependence
+V1	Weather + Irradiance	External drivers	Weather explains variability
+V2	Calendar	Seasonality	Time patterns improve forecasts
+V3	Lag	Temporal dependence	Recent history improves prediction
+V4	Rolling	Local trends	Smoother context reduces noise
+V5	Daylight	Solar geometry	Better representation of daylight cycle
+V6	Interaction	Nonlinear effects	Combined variables capture physical relationships

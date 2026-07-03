@@ -155,7 +155,7 @@ feature_table AS (
         MAX(g.solar_generation_mw) OVER (
             ORDER BY g.timestamp
             ROWS BETWEEN 24 PRECEDING AND 1 PRECEDING
-        ) AS solar_generation_mw_roll_max_24h
+        ) AS solar_generation_mw_roll_max_24h,
         
         -- Daylight Features
 
@@ -175,10 +175,26 @@ feature_table AS (
         CASE
           WHEN d.daylight_duration_hours > 0 THEN
               LEAST(
-                GREATEST(
-                  datediff('minute', d.sunrise, g.timestamp),
-                    0) / (d.daylight_duration_hours * 60.0),1.0
-              ) AS daylight_progress_pct,
+                  GREATEST(
+                      datediff('minute', d.sunrise, g.timestamp),
+                      0
+                  ) / (d.daylight_duration_hours * 60.0),
+                  1.0
+              )
+          ELSE 0
+        END AS daylight_progress_pct,,
+
+        -- Interaction Features
+
+        w.cloud_cover_pct * i.shortwave_radiation AS cloud_shortwave_interaction, -- Hypothesis: Clouds reduce the effectiveness of incoming solar radiation.
+        w.temperature_c * i.shortwave_radiation AS temperature_shortwave_interaction, -- Hypothesis: Higher irradiance increases output, but higher panel temperatures reduce efficiency.
+        w.wind_speed_kmh * w.temperature_c AS wind_temperature_interaction, -- Hypothesis: Wind cools solar panels, partially offsetting efficiency losses at higher temperatures.
+        (
+          CASE
+            WHEN d.daylight_duration_hours > 0 THEN
+                LEAST(...)
+            ELSE 0
+          END) * i.shortwave_radiation AS daylight_progress_shortwave_interaction -- Hypothesis: The same irradiance level may have different implications depending on where you are in the daylight cycle.
 
     FROM generation AS g
 
