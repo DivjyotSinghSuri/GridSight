@@ -23,6 +23,11 @@ generation AS (
 
 ),
 
+daylight AS (
+  SELECT * 
+  FROM {{ ref('stg_daylight') }}
+)
+
 feature_table AS (
 
     SELECT
@@ -151,6 +156,29 @@ feature_table AS (
             ORDER BY g.timestamp
             ROWS BETWEEN 24 PRECEDING AND 1 PRECEDING
         ) AS solar_generation_mw_roll_max_24h
+        
+        -- Daylight Features
+
+        d.daylight_duration_hours,
+        d.sunshine_duration_hours,
+
+        CASE
+          WHEN g.timestamp >= d.sunrise
+          AND g.timestamp <= d.sunset
+          THEN 1
+          ELSE 0
+        END AS is_daylight,
+
+        GREATEST(
+          datediff('minute', d.sunrise, g.timestamp),0) AS minutes_since_sunrise,
+
+        CASE
+          WHEN d.daylight_duration_hours > 0 THEN
+              LEAST(
+                GREATEST(
+                  datediff('minute', d.sunrise, g.timestamp),
+                    0) / (d.daylight_duration_hours * 60.0),1.0
+              ) AS daylight_progress_pct,
 
     FROM generation AS g
 
@@ -159,6 +187,9 @@ feature_table AS (
 
     LEFT JOIN irradiance AS i
         ON g.timestamp = i.timestamp
+
+    LEFT JOIN daylight AS d
+        ON CAST(g.timestamp AS DATE) = d.date
 
 )
 
