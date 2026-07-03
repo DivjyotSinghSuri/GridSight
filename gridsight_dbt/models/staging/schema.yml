@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: stg_weather
+    description: "Cleaned hourly weather observations aggregated to Germany-wide hourly averages."
+
+  - name: stg_irradiance
+    description: "Cleaned hourly solar irradiance observations aggregated to Germany-wide hourly averages."
+
+  - name: stg_generation
+    description: "Hourly solar electricity generation for Germany aggregated from ENTSO-E."
+
+  - name: stg_daylight
+    description: "Daily daylight characteristics including sunrise, sunset, daylight duration and sunshine duration."

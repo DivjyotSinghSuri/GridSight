@@ -1,276 +1,493 @@
-GridSight - Methodology & Design Decisions
-1. Data Architecture
+# GridSight - Methodology & Design Decisions
 
-Decision: Use Medallion Architecture (Bronze → Silver → Gold).
+## 1. Project Philosophy
 
-Reason:
+GridSight is designed as an end-to-end renewable energy analytics platform rather than a standalone machine learning project.
 
-Bronze preserves raw source data.
-Silver standardizes and cleans data.
-Gold contains ML-ready features.
-2. Data Sources
+The objective is to build a reproducible forecasting system covering:
 
-Weather: Open-Meteo
+- Data ingestion
+- Cloud storage
+- Data warehousing
+- Analytics engineering
+- Feature engineering
+- Machine learning
+- Experiment tracking
+- Forecast serving
+- Monitoring
 
-Solar Irradiance: Open-Meteo Solar
+Machine learning is treated as one component of the overall data platform.
 
-Generation: ENTSO-E (Actual Generation)
+---
 
-3. Storage Architecture
+# 2. System Architecture
 
-Raw API data
+```
+APIs
+    ↓
+AWS S3 (Bronze)
+    ↓
+DuckDB
+    ↓
+dbt
+    ↓
+Machine Learning
+    ↓
+Dashboard
+```
 
-→ AWS S3 (Bronze Data Lake)
+### Design Principles
 
-→ DuckDB (Warehouse)
+Each layer has a single responsibility.
 
-→ dbt (Transformations)
+- APIs collect raw data.
+- AWS S3 preserves immutable source data.
+- DuckDB stores analytical datasets.
+- dbt performs transformations.
+- Machine Learning trains forecasting models.
+- Dashboard consumes forecasts and analytics.
 
-4. Bronze Layer Philosophy
+---
 
-Store data as close to the source as possible.
+# 3. Data Architecture
 
-Only perform:
+## Decision
 
-basic type parsing
-XML → tabular conversion
-no business logic
-no feature engineering
-5. Silver Layer Philosophy
+Use the **Medallion Architecture**.
 
-Silver is responsible for:
+```
+Bronze
+   ↓
+Silver
+   ↓
+Gold
+```
 
-renaming columns
-standardizing units
-correcting data grain
-removing unnecessary columns
-preparing clean datasets
+### Reason
 
-No feature engineering.
+- Bronze preserves raw source data.
+- Silver standardizes and cleans datasets.
+- Gold contains machine-learning-ready features.
 
-6. Generation Aggregation
+Business logic only flows downstream.
+
+---
+
+# 4. Data Sources
+
+| Source | Purpose |
+|---------|---------|
+| Open-Meteo Weather API | Historical weather observations |
+| Open-Meteo Solar API | Solar irradiance observations |
+| Open-Meteo Daily API | Sunrise, sunset and daylight information |
+| ENTSO-E Transparency Platform | Actual solar generation |
+
+### Reason
+
+All sources are public, reproducible and suitable for research.
+
+---
+
+# 5. Storage Strategy
+
+```
+API Sources
+      ↓
+AWS S3 (Bronze Data Lake)
+      ↓
+DuckDB
+      ↓
+dbt Models
+```
+
+### Design Decisions
+
+- AWS S3 acts as immutable storage.
+- DuckDB serves as the analytical warehouse.
+- dbt owns all transformations.
+- Python is responsible only for ingestion.
+
+---
+
+# 6. Bronze Layer Philosophy
+
+## Purpose
+
+Preserve source data with minimal modification.
+
+### Allowed Transformations
+
+- XML parsing
+- Basic type conversion
+- API normalization
+- CSV generation
+
+### Not Allowed
+
+- Feature engineering
+- Business rules
+- Aggregations
+- Derived metrics
+
+Bronze should always be reproducible directly from the APIs.
+
+---
+
+# 7. Silver Layer Philosophy
+
+## Purpose
+
+Prepare clean analytical datasets.
+
+### Responsibilities
+
+- Rename columns
+- Standardize naming conventions
+- Standardize units
+- Remove unnecessary columns
+- Correct temporal grain
+- Correct spatial grain
+
+Feature engineering is intentionally excluded from the Silver layer.
+
+---
+
+# 8. Data Grain Standardization
+
+One of the most important design decisions in the project.
+
+## Final Grain
+
+```
+One Row
+=
+One Hour
+=
+Germany
+```
+
+Every downstream transformation assumes this grain.
+
+Before joining datasets, ensure every table represents the same business grain unless a different relationship is intentionally designed.
+
+---
+
+# 9. Temporal Aggregation
+
+## Generation Data
 
 ENTSO-E provides:
 
-Average power (MW)
-every 15 minutes
+- Average Power (MW)
+- Every 15 minutes
 
-Decision
+### Decision
 
 Aggregate using:
 
+```sql
 AVG(generation_mw)
+```
 
-instead of SUM.
+instead of:
 
-Reason
+```sql
+SUM(generation_mw)
+```
 
-Values represent average power over each 15-minute interval, not cumulative energy.
+### Reason
 
-7. Spatial Aggregation
+Generation values represent average power over each interval rather than cumulative energy.
 
-Weather & irradiance:
+Using `SUM()` would produce physically incorrect values.
 
-25 grid cells
+---
 
-Generation:
+# 10. Spatial Aggregation
 
-Germany-wide
+Weather and irradiance observations are collected at **25 sampling locations** across Germany.
 
-Problem
+Generation is available only at the national level.
 
-Different spatial granularity caused many-to-many joins.
+### Problem
 
-Decision
+Different spatial granularities would create many-to-many joins.
 
-Aggregate grid-level observations into one national observation per hour in the Silver layer.
+### Decision
 
-Initial aggregation:
+Aggregate weather and irradiance to Germany-wide hourly averages within the Silver layer.
 
-Temperature → AVG
-Humidity → AVG
-Precipitation → AVG
-Cloud Cover → AVG
-Wind Speed → AVG
-Irradiance metrics → AVG
-8. Wind Direction
+### Initial Aggregations
 
-Decision
+| Variable | Aggregation |
+|----------|-------------|
+| Temperature | AVG |
+| Relative Humidity | AVG |
+| Precipitation | AVG |
+| Cloud Cover | AVG |
+| Wind Speed | AVG |
+| Solar Irradiance Metrics | AVG |
 
-Drop initially.
+---
 
-Reason
+# 11. Wind Direction
 
-Circular variable
-Arithmetic mean is incorrect
-Expected low predictive contribution
-Can revisit later using vector averaging or sine/cosine encoding
-9. Gold Layer Philosophy
+## Decision
 
-One row
+Exclude from the initial feature set.
 
-=
+### Reason
 
-One hour
+Wind direction is a circular variable.
 
-Contains:
+Arithmetic averaging produces incorrect results.
 
-target
-raw predictors
-engineered features
+Future versions may include:
 
-Only model-ready data.
+- Vector averaging
+- Sine/Cosine encoding
 
-10. Gold Materialization
+if experiments justify its inclusion.
 
-Materialize as:
+---
 
-TABLE
+# 12. Gold Layer Philosophy
+
+## Purpose
+
+Provide a fully machine-learning-ready dataset.
+
+Each row contains:
+
+- Target variable
+- Raw predictors
+- Engineered features
+
+No additional transformations should be required before training.
+
+---
+
+# 13. Materialization Strategy
+
+## Silver
+
+Materialization:
+
+**View**
 
 Reason:
 
-expensive joins
-lag features
-rolling windows
-repeatedly read during training
-11. Join Strategy
+- Lightweight transformations
+- Easier maintenance
+
+## Gold
+
+Materialization:
+
+**Table**
+
+Reason:
+
+- Expensive joins
+- Window functions
+- Frequently accessed during model training
+
+---
+
+# 14. Join Strategy
 
 Driving table:
 
+**Generation**
+
+```
 Generation
+LEFT JOIN Weather
+LEFT JOIN Irradiance
+LEFT JOIN Daylight
+```
 
-LEFT JOIN
+### Reason
 
-Weather
+Every training observation must contain the target variable.
 
-LEFT JOIN
+Missing predictor values are preferable to missing targets.
 
-Irradiance
+---
 
-Reason:
+# 15. Feature Engineering Philosophy
 
-Target must always exist.
+Feature engineering is performed exclusively within the Gold layer.
 
-12. Feature Engineering Strategy
+Every feature must answer three questions:
 
-Do not engineer everything at once.
+1. Why should this improve forecasting?
+2. How is it computed?
+3. Can its impact be measured experimentally?
 
-Incremental versions:
+If any answer cannot be justified, the feature should not be included.
 
-V1
+---
 
-Raw features
+# 16. Feature Engineering Versions
 
-↓
+| Version | Feature Group | Purpose |
+|----------|---------------|---------|
+| V0 | Historical Generation | Baseline persistence model |
+| V1 | Weather + Irradiance | External environmental drivers |
+| V2 | Calendar | Seasonality and temporal cycles |
+| V3 | Lag Features | Temporal dependence |
+| V4 | Rolling Statistics | Local trends and smoothing |
+| V5 | Daylight Features | Solar geometry |
+| V6 | Interaction Features | Nonlinear relationships |
+| V7 | Advanced Solar Features *(Future)* | Additional solar-specific engineering |
 
-V2
+---
 
-Calendar features
+# 17. Daylight Features
 
-↓
+## Decision
 
-V3
+Explicitly engineer daylight features instead of relying solely on irradiance.
 
-Sunrise / Sunset / Daylight
+### Features
 
-↓
+- Daylight Duration
+- Sunshine Duration
+- Is Daylight
+- Minutes Since Sunrise
+- Daylight Progress (%)
 
-V4
+### Reason
 
-Lag features
+Solar production depends not only on irradiance but also on the position of the sun throughout the day.
 
-↓
+---
 
-V5
+# 18. Interaction Features
 
-Rolling statistics
+Interaction features are introduced only where a physical relationship exists.
 
-↓
+Current interactions:
 
-V6
+- Cloud Cover × Shortwave Radiation
+- Temperature × Shortwave Radiation
+- Wind Speed × Temperature
+- Daylight Progress × Shortwave Radiation
 
-Interaction features
+### Reason
 
-↓
+Capture nonlinear relationships while maintaining interpretability.
 
-V7
+---
 
-Advanced solar features
+# 19. Data Quality
 
-13. Experiment Methodology
+Data quality is enforced using dbt tests.
 
-First compare:
+Current tests:
 
-Different models
+- Unique timestamp
+- Non-null timestamp
+- Non-null target
+- Non-null 168-hour lag
+- Accepted values for `is_daylight`
+- Accepted values for `is_weekend`
+- Daylight progress constrained between 0 and 1
 
-Same features
+---
 
-↓
+# 20. Experiment Methodology
 
-Choose best model
+Experiments follow a controlled methodology.
 
-↓
+## Rules
 
-Keep model fixed
+Only one experimental variable changes at a time.
 
-↓
+```
+Feature Version
+        ↓
+Train Multiple Models
+        ↓
+Compare Models
+        ↓
+Select Best Model
+        ↓
+Feature Ablation
+        ↓
+Analyze Results
+```
 
-Compare feature sets
+Never compare:
 
-↓
+- Different models
+- Different feature sets
 
-Run ablation study
+simultaneously.
 
-Never change:
+---
 
-model
-features
+# 21. Evaluation Metrics
 
-at the same time.
+Every experiment records:
 
-14. Evaluation Metrics
+- Dataset Version
+- Model
+- Feature Set
+- Hyperparameters
+- Notes
 
-Track every experiment.
+Primary evaluation metric:
 
-Metrics:
+- MAPE
 
-MAE
-RMSE
-MAPE
+Secondary metrics:
 
-Log:
+- MAE
+- RMSE
 
-dataset version
-model
-features added
-notes
-15. Research Methodology
+---
 
-Potential paper themes:
+# 22. Feature Version Roadmap
 
-Feature engineering impact
-Model comparison
-Feature ablation
+| Version | New Feature Group | Why Added | Hypothesis |
+|----------|-------------------|-----------|------------|
+| V0 | Historical Generation | Baseline | Persistence captures temporal dependence |
+| V1 | Weather + Irradiance | External drivers | Weather explains generation variability |
+| V2 | Calendar | Seasonality | Temporal cycles improve forecasting |
+| V3 | Lag Features | Temporal dependence | Recent observations improve prediction |
+| V4 | Rolling Statistics | Local trends | Smoothed history reduces noise |
+| V5 | Daylight Features | Solar geometry | Explicit daylight representation improves forecasts |
+| V6 | Interaction Features | Nonlinear effects | Combined variables capture physical relationships |
 
-Paper should emerge from experiments, not the other way around.
+---
 
-16. Engineering Principle
+# 23. Research Methodology
 
-Every new feature must answer:
+The research question is not fixed before experimentation.
 
-Why should this improve forecasting?
-How is it computed?
-How much did it improve performance?
+Instead:
 
-If one of those cannot be answered, reconsider adding it.
+1. Build the platform.
+2. Conduct reproducible experiments.
+3. Analyze empirical results.
+4. Draw conclusions from evidence.
 
-Validate the grain of every dataset before joining. All tables participating in a join should represent the same business grain (e.g., one row per hour) unless a deliberate many-to-one or one-to-many relationship is intended.
+This minimizes confirmation bias and improves reproducibility.
 
-Version	New Feature Group	Why Added	Hypothesis
-V0	Historical generation	Baseline	Persistence captures temporal dependence
-V1	Weather + Irradiance	External drivers	Weather explains variability
-V2	Calendar	Seasonality	Time patterns improve forecasts
-V3	Lag	Temporal dependence	Recent history improves prediction
-V4	Rolling	Local trends	Smoother context reduces noise
-V5	Daylight	Solar geometry	Better representation of daylight cycle
-V6	Interaction	Nonlinear effects	Combined variables capture physical relationships
+---
+
+# 24. Engineering Principles
+
+Throughout GridSight, the following principles guide implementation.
+
+- Separate ingestion from transformation.
+- Validate data before feature engineering.
+- Standardize grain before joining datasets.
+- Prefer reproducibility over convenience.
+- Keep every engineering decision explainable.
+- Measure the contribution of every feature.
+- Change only one experimental variable at a time.
+- Build incrementally and validate every stage before moving forward.
+- Favor simple, interpretable solutions before introducing additional complexity.

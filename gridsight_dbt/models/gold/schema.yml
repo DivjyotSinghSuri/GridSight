@@ -40,3 +40,21 @@ models:
               arguments:
                 min_value: 0
                 max_value: 1
+
+      - name: temperature_c
+        description: "Average hourly air temperature across Germany."
+
+      - name: cloud_cover_pct
+        description: "Average hourly cloud cover percentage."
+
+      - name: shortwave_radiation
+        description: "Average incoming shortwave solar radiation."
+
+      - name: solar_generation_mw_lag_24h
+        description: "Solar generation observed 24 hours before the current timestamp."
+
+      - name: solar_generation_mw_roll_mean_24h
+        description: "Mean solar generation over the previous 24 hours."
+
+      - name: cloud_shortwave_interaction
+        description: "Interaction feature capturing the combined effect of cloud cover and shortwave radiation."
