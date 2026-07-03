@@ -24,6 +24,8 @@ with open("warehouse/queries/bronze_irradiance.sql") as f:
     conn.execute(f.read())
 with open("warehouse/queries/bronze_generation.sql") as f:
     conn.execute(f.read())
+with open("warehouse/queries/bronze_daylight.sql") as f:
+    conn.execute(f.read())
 
 
 print(conn.execute("""

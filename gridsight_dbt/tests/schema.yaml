@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: stg_daylight
+    columns:
+      - name: date
+        tests:
+          - unique
+          - not_null
+
+      - name: sunrise
+        tests:
+          - not_null
+
+      - name: sunset
+        tests:
+          - not_null
