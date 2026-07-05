@@ -491,3 +491,5 @@ Throughout GridSight, the following principles guide implementation.
 - Change only one experimental variable at a time.
 - Build incrementally and validate every stage before moving forward.
 - Favor simple, interpretable solutions before introducing additional complexity.
+
+The target variable represents average hourly power (MW). Daily forecasts are obtained by aggregating hourly predictions over 24 hours, yielding an approximation of daily energy generation (MWh).

@@ -6,7 +6,7 @@ COUNTRY = "germany"
 TIMEZONE = "Europe/Berlin"
 
 START_DATE = "2023-01-01"
-END_DATE = "2025-12-31"
+END_DATE = "2026-06-30"
 
 S3_BUCKET = "gridsight-raw"
 
