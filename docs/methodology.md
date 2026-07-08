@@ -336,11 +336,10 @@ If any answer cannot be justified, the feature should not be included.
 | V0 | Historical Generation | Baseline persistence model |
 | V1 | Weather + Irradiance | External environmental drivers |
 | V2 | Calendar | Seasonality and temporal cycles |
-| V3 | Lag Features | Temporal dependence |
+| V3 | Daylight Features | Solar geometry |
 | V4 | Rolling Statistics | Local trends and smoothing |
-| V5 | Daylight Features | Solar geometry |
-| V6 | Interaction Features | Nonlinear relationships |
-| V7 | Advanced Solar Features *(Future)* | Additional solar-specific engineering |
+| V5 | Interaction Features | Nonlinear relationships |
+| V6 | Advanced Solar Features *(Future)* | Additional solar-specific engineering |
 
 ---
 
@@ -397,13 +396,12 @@ Current tests:
 
 ---
 
-# 20. Experiment Methodology
+# 20. Machine Learning Experiment Methodology
 
-Experiments follow a controlled methodology.
+GridSight follows an incremental feature engineering strategy.
 
-## Rules
+Rather than engineering all features simultaneously, new feature groups are introduced one version at a time.
 
-Only one experimental variable changes at a time.
 
 ```
 Feature Version
@@ -419,33 +417,38 @@ Feature Ablation
 Analyze Results
 ```
 
-Never compare:
 
-- Different models
-- Different feature sets
+For every feature version:
 
-simultaneously.
+1. Train multiple machine learning models.
+2. Evaluate using identical train/test splits.
+3. Compare model performance.
+4. Select the best-performing model.
+5. Perform feature ablation.
+6. Explain predictions using SHAP.
+
+Only one experimental variable is modified at a time to ensure that performance improvements can be attributed to a specific feature group.
 
 ---
 
 # 21. Evaluation Metrics
 
-Every experiment records:
+Primary evaluation metric
 
-- Dataset Version
-- Model
-- Feature Set
-- Hyperparameters
-- Notes
+- WAPE
 
-Primary evaluation metric:
-
-- MAPE
-
-Secondary metrics:
+Secondary metrics
 
 - MAE
 - RMSE
+
+### Reason
+
+Solar generation contains numerous zero and near-zero observations during nighttime and around sunrise/sunset.
+
+Traditional MAPE becomes unstable when actual values approach zero.
+
+WAPE provides a more robust percentage-based evaluation while remaining easily interpretable.
 
 ---
 
@@ -493,3 +496,42 @@ Throughout GridSight, the following principles guide implementation.
 - Favor simple, interpretable solutions before introducing additional complexity.
 
 The target variable represents average hourly power (MW). Daily forecasts are obtained by aggregating hourly predictions over 24 hours, yielding an approximation of daily energy generation (MWh).
+
+# Explainability
+
+Model explainability is performed using SHAP.
+
+SHAP is used to:
+
+- rank feature importance
+- understand local predictions
+- validate engineering assumptions
+- compare learned relationships with domain knowledge
+
+Explainability is performed only after the best-performing model has been selected.
+
+# 22. Model Selection Strategy
+
+The following models are evaluated under identical experimental conditions.
+
+- Linear Regression
+- XGBoost
+- LightGBM
+
+All models use:
+
+- identical training data
+- identical testing data
+- identical feature versions
+
+The best-performing model is selected using WAPE before hyperparameter tuning, feature ablation and explainability analysis.
+
+# Experimental Results
+
+The baseline experiments demonstrated that incremental feature engineering substantially improved forecasting performance.
+
+Rolling statistics produced the largest improvement, while interaction features provided additional gains.
+
+Surprisingly, Linear Regression outperformed both XGBoost and LightGBM under the initial experimental setup, highlighting the importance of feature engineering over model complexity.
+
+Further analysis is conducted through hyperparameter tuning, feature ablation and SHAP explainability.

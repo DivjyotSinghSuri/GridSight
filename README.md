@@ -14,11 +14,11 @@ An end-to-end data engineering and machine learning platform for renewable energ
 
 ## Overview
 
-GridSight is an end-to-end renewable energy analytics platform designed to forecast renewable electricity generation across Germany.
+GridSight is an end-to-end renewable energy analytics platform for forecasting hourly solar electricity generation across Germany.
 
-The platform ingests historical weather, solar irradiance, and electricity generation data from multiple public APIs, stores raw data in an Amazon S3 Bronze Data Lake, transforms it using dbt on DuckDB, and trains machine learning models for renewable energy forecasting.
+The platform ingests historical weather, solar irradiance, daylight, and electricity generation data from public APIs, stores raw data in an Amazon S3 Bronze Data Lake, transforms it using DuckDB and dbt following the Medallion Architecture, and trains machine learning models through a reproducible experimentation pipeline.
 
-The project emphasizes modern data engineering practices including ELT pipelines, cloud storage, data modeling, and analytical feature engineering.
+Rather than focusing solely on model accuracy, GridSight emphasizes reproducible data engineering, feature engineering, experiment tracking, and explainable machine learning.
 
 ---
 
@@ -41,7 +41,8 @@ The project emphasizes modern data engineering practices including ELT pipelines
 | Data Lake | Amazon S3 |
 | Data Warehouse | DuckDB |
 | Transformations | dbt Core |
-| Machine Learning | LightGBM, XGBoost, Random Forest |
+| Machine Learning | Linear Regression, XGBoost, LightGBM |
+| Experiment Tracking | pandas (MLflow planned) |
 | Dashboard | Streamlit |
 
 ---
@@ -73,6 +74,40 @@ The project emphasizes modern data engineering practices including ELT pipelines
 
 ---
 
+## Machine Learning Pipeline
+
+The forecasting workflow follows an incremental feature engineering strategy.
+
+```text
+Gold Dataset
+      │
+      ▼
+Train / Test Split
+      │
+      ▼
+Feature Versions (V0 → V5)
+      │
+      ▼
+Linear Regression
+XGBoost
+LightGBM
+      │
+      ▼
+Performance Evaluation
+(MAE • RMSE • WAPE)
+      │
+      ▼
+Best Model Selection
+      │
+      ▼
+SHAP Explainability
+      │
+      ▼
+Forecast Deployment
+```
+
+---
+
 ## Repository Structure
 
 ```text
@@ -82,7 +117,7 @@ GridSight/
 ├── ingestion/             # API ingestion pipelines
 ├── warehouse/             # DuckDB loading scripts
 ├── dbt/                   # SQL transformations
-├── models/                # Machine learning
+├── notebooks/                # Machine learning
 ├── dashboard/             # Streamlit application
 ├── data/                  # Local temporary storage
 │
@@ -96,15 +131,44 @@ GridSight/
 
 ## Features
 
-- Historical weather ingestion from Open-Meteo
-- Solar irradiance ingestion from Open-Meteo Solar
-- Electricity generation ingestion from ENTSO-E
-- Automated ELT pipelines
+### Data Engineering
+
+- Automated API ingestion pipelines
 - Amazon S3 Bronze Data Lake
 - DuckDB analytical warehouse
-- dbt-based data transformations
-- Renewable energy forecasting with LightGBM
-- Interactive analytics dashboard with Streamlit
+- Medallion Architecture (Bronze, Silver, Gold)
+- dbt transformations and testing
+- Reproducible feature engineering
+
+### Machine Learning
+
+- Incremental feature engineering experiments
+- Automated comparison of multiple models
+- Linear Regression, XGBoost and LightGBM
+- WAPE, MAE and RMSE evaluation
+- Actual vs Predicted performance visualization
+- Feature ablation (planned)
+- SHAP explainability (planned)
+
+### Analytics
+
+- Interactive Streamlit dashboard
+- Hourly solar generation forecasting
+
+---
+
+## Initial Results
+
+The baseline experimentation pipeline compares three machine learning models across six incremental feature engineering versions.
+
+Current observations:
+
+- Feature engineering reduced WAPE from approximately **47% to 8%**.
+- Rolling statistical features produced the largest improvement.
+- Interaction features provided additional performance gains.
+- Linear Regression currently outperforms XGBoost and LightGBM under default hyperparameters.
+
+Further improvements through hyperparameter tuning, feature ablation and SHAP explainability are currently in progress.
 
 ---
 
