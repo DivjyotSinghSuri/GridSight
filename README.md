@@ -117,7 +117,7 @@ GridSight/
 ├── ingestion/             # API ingestion pipelines
 ├── warehouse/             # DuckDB loading scripts
 ├── dbt/                   # SQL transformations
-├── notebooks/                # Machine learning
+├── notebooks/             # Machine learning
 ├── dashboard/             # Streamlit application
 ├── data/                  # Local temporary storage
 │
