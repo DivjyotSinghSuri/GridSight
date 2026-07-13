@@ -433,14 +433,16 @@ Only one experimental variable is modified at a time to ensure that performance 
 
 # 21. Evaluation Metrics
 
-Primary evaluation metric
+Primary evaluation metric:
 
-- WAPE
+- WAPE (Weighted Absolute Percentage Error)
 
-Secondary metrics
+Secondary evaluation metrics:
 
-- MAE
-- RMSE
+- MAE (Mean Absolute Error)
+- RMSE (Root Mean Squared Error)
+
+WAPE was selected because renewable energy generation contains frequent periods of near-zero production (e.g., nighttime), causing MAPE to become unstable and artificially inflate forecasting errors. WAPE provides a more robust and interpretable evaluation for this application.
 
 ### Reason
 
@@ -535,3 +537,31 @@ Rolling statistics produced the largest improvement, while interaction features 
 Surprisingly, Linear Regression outperformed both XGBoost and LightGBM under the initial experimental setup, highlighting the importance of feature engineering over model complexity.
 
 Further analysis is conducted through hyperparameter tuning, feature ablation and SHAP explainability.
+
+# Hyperparameter Optimization
+
+After evaluating baseline model performance, hyperparameter optimization is performed to identify the best production forecasting pipeline.
+
+Optimization is conducted independently for each feature version using Optuna.
+
+```
+Feature Version
+        ↓
+Hyperparameter Optimization
+        ↓
+Best Hyperparameters
+        ↓
+Model Evaluation
+        ↓
+Production Model Selection
+```
+
+Each model is optimized using WAPE as the objective function.
+
+The following model families are optimized:
+
+- Ridge Regression
+- XGBoost
+- LightGBM
+
+The final production model is selected based on the lowest WAPE obtained after optimization.
