@@ -1,0 +1,155 @@
+import os
+from src.utils.logger import logger
+from datetime import datetime
+from src.utils.config import *
+from src.utils.grid import generate_grid
+import time
+import requests
+
+import boto3
+import pandas as pd
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+s3 = boto3.client(
+    "s3",
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("AWS_DEFAULT_REGION")
+)
+
+def build_request(lat,lon):
+  url = OPEN_METEO_SOLAR_URL
+  
+  params = {
+    "latitude": lat,
+    "longitude": lon,
+    "start_date": START_DATE,
+    "end_date": END_DATE,
+    "hourly": ",".join(SOLAR_VARIABLES),
+    "timezone": TIMEZONE
+}
+  return url, params
+
+
+def fetch_irradiance(url, params):
+    logger.info("Fetching historical solar irradiance data...")
+
+    max_retries = 5
+
+    for attempt in range(max_retries):
+
+        response = requests.get(
+            url,
+            params=params,
+            timeout=60
+        )
+
+        if response.status_code == 429:
+            wait = 30 * (attempt + 1)
+            logger.warning(
+                f"Rate limited (429). Retrying in {wait} seconds..."
+            )
+            time.sleep(wait)
+            continue
+
+        response.raise_for_status()
+
+        data = response.json()
+
+        if "hourly" not in data:
+            raise ValueError(
+                "Open-Meteo Solar response does not contain 'hourly' data."
+            )
+
+        time.sleep(3)
+        return data
+
+    raise Exception("Maximum retries exceeded due to repeated rate limiting.")
+
+def create_dataframe(data):
+  df = pd.DataFrame(data["hourly"])
+  logger.info(f"Created DataFrame with {len(df)} rows.")
+  return df
+
+def save_csv(df, grid_id):
+  start = START_DATE.replace("-", "_")
+  end = END_DATE.replace("-", "_")
+  filename = f"irradiance_historical_{start}_{end}.csv"
+  
+  filepath = f"data/raw/{filename}"
+  
+  df.to_csv(
+    filepath,
+    index=False
+)
+  logger.info(f"Saved irradiance data to {filepath}")
+  
+  return filepath
+
+def upload_to_s3(filepath, grid_id):
+  filename = os.path.basename(filepath)
+  s3_key = (
+    f"bronze/irradiance/openmeteo/{COUNTRY}/"
+    f"{grid_id}/{filename}"
+)
+    
+  s3.upload_file(
+      Filename=filepath,
+      Bucket=S3_BUCKET,
+      Key=s3_key)
+    
+  logger.info(f"Uploaded {filename} to s3://{S3_BUCKET}/{s3_key}")
+
+  os.remove(filepath)
+  logger.info(f"Deleted local file: {filepath}")
+
+  return s3_key
+
+def main():
+  logger.info("Starting Open-Meteo irradiance ingestion...")
+
+  grid_points = generate_grid()
+
+  successful_uploads = 0
+
+  try:
+      for grid_id, lat, lon in grid_points:
+
+          try:
+              logger.info(f"Processing {grid_id} ({lat}, {lon})")
+
+              url, params = build_request(lat, lon)
+
+              data = fetch_irradiance(url, params)
+              df = create_dataframe(data)
+
+              filepath = save_csv(df, grid_id)
+
+              s3_key = upload_to_s3(filepath, grid_id)
+
+              logger.info(f"{grid_id} uploaded successfully.")
+              logger.info(f"S3 Object: {s3_key}")
+
+              successful_uploads += 1
+
+          except Exception as e:
+              logger.exception(f"{grid_id} failed: {e}")
+              continue
+
+      logger.info(
+          f"Weather ingestion completed. Successfully uploaded "
+          f"{successful_uploads}/{len(grid_points)} grid points."
+        )
+
+  except Exception as e:
+      logger.exception(f"Weather ingestion failed: {e}")
+
+  finally:
+      logger.info("Pipeline execution finished.")
+
+
+if __name__ == "__main__":
+    main()
