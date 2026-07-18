@@ -18,13 +18,13 @@ CREATE OR REPLACE SECRET gridsight_s3 (
 );
 """)
 
-with open("warehouse/queries/bronze_weather.sql") as f:
+with open("database/queries/daily/bronze_weather.sql") as f:
     conn.execute(f.read())
-with open("warehouse/queries/bronze_irradiance.sql") as f:
+with open("database/queries/daily/bronze_irradiance.sql") as f:
     conn.execute(f.read())
-with open("warehouse/queries/bronze_generation.sql") as f:
+with open("database/queries/daily/bronze_generation.sql") as f:
     conn.execute(f.read())
-with open("warehouse/queries/bronze_daylight.sql") as f:
+with open("database/queries/daily/bronze_daylight.sql") as f:
     conn.execute(f.read())
 
 
@@ -56,6 +56,5 @@ print(conn.execute("""
 DESCRIBE bronze_generation;
 """).fetchdf()
 )
-
 
 conn.close()
