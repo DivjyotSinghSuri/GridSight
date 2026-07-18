@@ -5,9 +5,6 @@ COUNTRY = "germany"
 
 TIMEZONE = "Europe/Berlin"
 
-START_DATE = "2023-01-01"
-END_DATE = "2026-06-30"
-
 S3_BUCKET = "gridsight-raw"
 
 # Germany Bounding Box
@@ -52,9 +49,9 @@ PROCESS_TYPE = "A16"
 GERMANY_LAT = 51.1657
 GERMANY_LON = 10.4515
 
-DAYLIGHT_VARIABLES = [
+DAYLIGHT_VARIABLES = ",".join([
     "sunrise",
     "sunset",
     "daylight_duration",
-    "sunshine_duration"
-]
+    "sunshine_duration",
+])
