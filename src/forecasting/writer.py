@@ -1,5 +1,5 @@
 import duckdb
-from config import DATABASE_PATH, FORECAST_TABLE
+from .config import DATABASE_PATH, FORECAST_TABLE
 
 
 def write_forecasts(forecast_df):

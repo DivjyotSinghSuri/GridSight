@@ -1,5 +1,4 @@
-from forecasting.config import DATASET_COLUMNS
-
+from .config import DATASET_COLUMNS
 def validate_table_not_empty(df):
     """
     Ensures the input DataFrame contains at least one row.
@@ -61,13 +60,12 @@ def validate_feature_order(df, expected_columns):
         )
         
 def validate_dataset(df):
-  """
+    """
     Runs all validation checks before prediction.
-  """
+    """
 
-  validate_table_not_empty(df)
-  validate_required_columns(df, DATASET_COLUMNS)
-  validate_feature_order(df, DATASET_COLUMNS)
-  validate_missing_values(df)
-  validate_duplicate_timestamps(df)
-  validate_feature_order(df)
+    validate_table_not_empty(df)
+    validate_required_columns(df, DATASET_COLUMNS)
+    validate_feature_order(df, DATASET_COLUMNS)
+    validate_missing_values(df)
+    validate_duplicate_timestamps(df)

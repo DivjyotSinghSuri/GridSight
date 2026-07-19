@@ -1,8 +1,8 @@
 import duckdb
-from config import DATABASE_PATH
-from predictor import run_prediction
-from validator import validate_dataset
-from writer import write_forecasts
+from .config import DATABASE_PATH
+from .predictor import run_prediction
+from .validator import validate_dataset
+from .writer import write_forecasts
 
 
 def load_forecast_dataset():
@@ -15,6 +15,9 @@ def load_forecast_dataset():
             SELECT *
             FROM gold_forecast_features
         """).df()
+        
+        print(forecast_df.shape)
+        print(forecast_df.head())
 
     return forecast_df
 

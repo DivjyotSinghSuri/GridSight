@@ -1,10 +1,12 @@
-import duckdb
 import os
+import duckdb
 from dotenv import load_dotenv
 
 load_dotenv()
 
-conn = duckdb.connect("gridsight.duckdb")
+DATABASE_PATH = "gridsight.duckdb"
+
+conn = duckdb.connect(DATABASE_PATH)
 
 conn.execute("INSTALL httpfs;")
 conn.execute("LOAD httpfs;")
@@ -18,43 +20,29 @@ CREATE OR REPLACE SECRET gridsight_s3 (
 );
 """)
 
-with open("database/queries/daily/bronze_weather.sql") as f:
-    conn.execute(f.read())
-with open("database/queries/daily/bronze_irradiance.sql") as f:
-    conn.execute(f.read())
-with open("database/queries/daily/bronze_generation.sql") as f:
-    conn.execute(f.read())
-with open("database/queries/daily/bronze_daylight.sql") as f:
-    conn.execute(f.read())
+queries = [
+    "database/queries/daily/bronze_weather.sql",
+    "database/queries/daily/bronze_irradiance.sql",
+    "database/queries/daily/bronze_generation.sql",
+    "database/queries/daily/bronze_daylight.sql",
+]
 
+for query in queries:
+    with open(query, "r") as f:
+        conn.execute(f.read())
 
-print(conn.execute("""
-SELECT COUNT(*) FROM bronze_weather;
-""").fetchone()
-)
+tables = [
+    "bronze_weather",
+    "bronze_irradiance",
+    "bronze_generation",
+    "bronze_daylight",
+]
 
-print(conn.execute("""
-DESCRIBE bronze_weather;
-""").fetchdf()
-)
+for table in tables:
+    count = conn.execute(
+        f"SELECT COUNT(*) FROM {table};"
+    ).fetchone()[0]
 
-print(conn.execute("""
-SELECT COUNT(*) FROM bronze_irradiance;
-""").fetchone()
-)
-
-print(conn.execute("""
-DESCRIBE bronze_irradiance;
-""").fetchdf()
-)
-print(conn.execute("""
-SELECT COUNT(*) FROM bronze_generation;
-""").fetchone()
-)
-
-print(conn.execute("""
-DESCRIBE bronze_generation;
-""").fetchdf()
-)
+    print(f"{table}: {count} rows")
 
 conn.close()

@@ -1,6 +1,9 @@
 import requests
+import time
 import pandas as pd
 import xml.etree.ElementTree as ET
+
+from requests.exceptions import RequestException
 
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -34,7 +37,7 @@ PSR_TYPES = {
 
 
 def _generate_monthly_ranges(start_date, end_date):
-    
+
     if isinstance(start_date, str):
         start = datetime.strptime(start_date, "%Y-%m-%d")
     else:
@@ -44,7 +47,7 @@ def _generate_monthly_ranges(start_date, end_date):
         end = datetime.strptime(end_date, "%Y-%m-%d")
     else:
         end = datetime.combine(end_date, datetime.min.time())
-        
+
     ranges = []
 
     current = start
@@ -78,17 +81,47 @@ def _build_request(period_start, period_end):
 def _request_generation(url, params):
     logger.info("Fetching generation data from ENTSO-E...")
 
-    response = requests.get(
-        url,
-        params=params,
-        timeout=60
-    )
+    max_retries = 5
 
-    response.raise_for_status()
+    for attempt in range(max_retries):
 
-    logger.info("Generation data fetched successfully.")
+        try:
+            response = requests.get(
+                url,
+                params=params,
+                timeout=60
+            )
 
-    return response.text
+            if response.status_code == 429:
+                wait = 30 * (attempt + 1)
+
+                logger.warning(
+                    f"Rate limited (429). Retrying in {wait} seconds..."
+                )
+
+                time.sleep(wait)
+                continue
+
+            response.raise_for_status()
+
+            logger.info("Generation data fetched successfully.")
+
+            return response.text
+
+        except RequestException as e:
+
+            if attempt == max_retries - 1:
+                raise
+
+            wait = 10 * (attempt + 1)
+
+            logger.warning(
+                f"Request failed ({e}). Retrying in {wait} seconds..."
+            )
+
+            time.sleep(wait)
+
+    raise Exception("Maximum retries exceeded.")
 
 
 def _parse_generation(xml_data):
@@ -168,9 +201,9 @@ def fetch_generation(start_date, end_date):
     """
 
     ranges = _generate_monthly_ranges(
-        start_date,
-        end_date
-    )
+    start_date,
+    end_date + timedelta(days=1)
+)
 
     monthly_dfs = []
 

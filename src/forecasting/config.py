@@ -63,8 +63,8 @@ DATASET_COLUMNS = [
 
 MODEL_FEATURES = DATASET_COLUMNS[1:]
 
-DATABASE_PATH = "../gridsight.duckdb"
+DATABASE_PATH = "gridsight.duckdb"
 
-PRODUCTION_MODEL_PATH = "../models/production_model.joblib"
+PRODUCTION_MODEL_PATH = "models/production_model.joblib"
 
 FORECAST_TABLE = "gold_forecasts"

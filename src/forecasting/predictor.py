@@ -1,6 +1,6 @@
 import joblib
 import pandas as pd
-from config import MODEL_FEATURES, PRODUCTION_MODEL_PATH
+from .config import MODEL_FEATURES, PRODUCTION_MODEL_PATH
 
 def load_model():
   production_model = joblib.load(PRODUCTION_MODEL_PATH)
@@ -20,10 +20,14 @@ def create_forecast_df(df, predictions):
   return forecast_df
 
 def run_prediction(df):
-  model = load_model()
-  X = prepare_features(df)
-  predictions = predict(model, X)
-  forecast_df = create_forecast_df(df, predictions)
-  
-  return forecast_df
-  
+    model = load_model()
+
+    X = df.drop(columns=["timestamp"]).copy()
+
+    # Ensure exactly the same columns and order used during training
+    X = X.loc[:, model.feature_names_in_]
+
+    predictions = model.predict(X)
+
+    forecast_df = create_forecast_df(df, predictions)
+    return forecast_df

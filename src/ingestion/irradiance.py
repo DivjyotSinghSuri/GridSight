@@ -2,12 +2,15 @@ import requests
 import time
 import pandas as pd
 
+from requests.exceptions import RequestException
+
 from src.utils.config import (
     OPEN_METEO_SOLAR_URL,
     SOLAR_VARIABLES,
     TIMEZONE
 )
 from src.utils.logger import logger
+
 
 def _build_request(lat, lon, start_date, end_date):
     params = {
@@ -32,37 +35,57 @@ def _request_irradiance(url, params, lat, lon, start_date, end_date):
 
     for attempt in range(max_retries):
 
-        response = requests.get(
-            url,
-            params=params,
-            timeout=60
-        )
+        try:
+            response = requests.get(
+                url,
+                params=params,
+                timeout=60
+            )
 
-        if response.status_code == 429:
-            wait = 30 * (attempt + 1)
+            if response.status_code == 429:
+                wait = 30 * (attempt + 1)
+
+                logger.warning(
+                    f"Rate limited (429). Retrying in {wait} seconds..."
+                )
+
+                time.sleep(wait)
+                continue
+
+            response.raise_for_status()
+
+            data = response.json()
+
+            if "hourly" not in data:
+                raise ValueError(
+                    "Open-Meteo response does not contain 'hourly' data."
+                )
+
+            time.sleep(3)
+
+            df = pd.DataFrame(data["hourly"])
+
+            logger.info(
+                f"Retrieved {len(df)} hourly records."
+            )
+
+            return df
+
+        except RequestException as e:
+
+            if attempt == max_retries - 1:
+                raise
+
+            wait = 10 * (attempt + 1)
+
             logger.warning(
-                f"Rate limited (429). Retrying in {wait} seconds..."
+                f"Request failed ({e}). Retrying in {wait} seconds..."
             )
+
             time.sleep(wait)
-            continue
 
-        response.raise_for_status()
+    raise Exception("Maximum retries exceeded.")
 
-        data = response.json()
-
-        if "hourly" not in data:
-            raise ValueError(
-                "Open-Meteo response does not contain 'hourly' data."
-            )
-
-        time.sleep(3)
-        df = pd.DataFrame(data["hourly"])
-
-        logger.info(f"Retrieved {len(df)} hourly records.")
-
-        return df
-
-    raise Exception("Maximum retries exceeded due to repeated rate limiting.")
 
 def fetch_irradiance(lat, lon, start_date, end_date):
     """
@@ -71,6 +94,7 @@ def fetch_irradiance(lat, lon, start_date, end_date):
     Returns:
         pandas.DataFrame
     """
+
     url, params = _build_request(
         lat,
         lon,
@@ -78,7 +102,7 @@ def fetch_irradiance(lat, lon, start_date, end_date):
         end_date
     )
 
-    df = _request_irradiance(
+    return _request_irradiance(
         url,
         params,
         lat,
@@ -86,7 +110,3 @@ def fetch_irradiance(lat, lon, start_date, end_date):
         start_date,
         end_date
     )
-
-    return df
-
-    

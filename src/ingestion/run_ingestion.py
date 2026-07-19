@@ -4,7 +4,7 @@ from src.ingestion.weather import fetch_weather
 from src.ingestion.irradiance import fetch_irradiance
 from src.ingestion.daylight import fetch_daylight
 from src.ingestion.generation import fetch_generation
-from src.ingestion.bronze_writer import write_bronze
+from src.ingestion.bronze_writer import write_bronze, cleanup_old_files
 
 from src.utils.grid import generate_grid
 from src.utils.logger import logger
@@ -17,9 +17,11 @@ def main():
 
     logger.info("Starting Bronze ingestion pipeline.")
 
-    end_date = datetime.today().date()
-    start_date = end_date - timedelta(days=1)
+    today = datetime.today().date() - timedelta(days=1)
 
+    start_date = today
+    end_date = today
+    
     grid_points = generate_grid()
 
     logger.info(f"Processing {len(grid_points)} grid points.")
@@ -42,7 +44,10 @@ def main():
     folder=grid_id,
     filename=f"{start_date:%Y%m%d}.csv"
 )
-
+        cleanup_old_files(
+    source="weather/openmeteo",
+    folder=grid_id
+)
         # Irradiance
         irradiance_df = fetch_irradiance(
             lat,
@@ -56,6 +61,10 @@ def main():
     source="irradiance/openmeteo",
     folder=grid_id,
     filename=f"{start_date:%Y%m%d}.csv"
+)
+        cleanup_old_files(
+    source="irradiance/openmeteo",
+    folder=grid_id
 )
 
     logger.info("Weather and irradiance ingestion completed.")
@@ -71,7 +80,10 @@ def main():
     source="daylight/openmeteo",
     filename=f"{start_date:%Y%m%d}.csv"
 )
-
+    cleanup_old_files(
+    source="daylight/openmeteo"
+)
+    
     logger.info("Daylight ingestion completed.")
 
     # Generation
@@ -84,6 +96,9 @@ def main():
     df=generation_df,
     source="generation/entsoe",
     filename=f"{start_date:%Y%m%d}.csv"
+)
+    cleanup_old_files(
+    source="generation/entsoe"
 )
 
     logger.info("Generation ingestion completed.")

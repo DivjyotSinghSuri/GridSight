@@ -2,6 +2,7 @@ import os
 import boto3
 import pandas as pd
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 from src.utils.config import (
     COUNTRY,
@@ -117,3 +118,55 @@ def write_bronze(
 )
 
     return s3_key
+
+def cleanup_old_files(source, folder=None, keep_days=14):
+    """
+    Deletes Bronze files older than keep_days from S3.
+    """
+
+    if folder:
+        prefix = (
+            f"bronze/"
+            f"{source}/"
+            f"{COUNTRY}/"
+            f"daily/"
+            f"{folder}/"
+        )
+    else:
+        prefix = (
+            f"bronze/"
+            f"{source}/"
+            f"{COUNTRY}/"
+            f"daily/"
+        )
+
+    response = s3.list_objects_v2(
+        Bucket=S3_BUCKET,
+        Prefix=prefix
+    )
+
+    if "Contents" not in response:
+        return
+
+    cutoff = datetime.utcnow().date() - timedelta(days=keep_days)
+
+    for obj in response["Contents"]:
+
+        filename = obj["Key"].split("/")[-1]
+
+        try:
+            file_date = datetime.strptime(
+                filename.replace(".csv", ""),
+                "%Y%m%d"
+            ).date()
+        except ValueError:
+            continue
+
+        if file_date < cutoff:
+
+            s3.delete_object(
+                Bucket=S3_BUCKET,
+                Key=obj["Key"]
+            )
+
+            logger.info(f"Deleted old Bronze file: {obj['Key']}")
