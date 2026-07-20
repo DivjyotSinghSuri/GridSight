@@ -36,6 +36,32 @@ Machine Learning
 Dashboard
 ```
 
+# 2.1 Pipeline Orchestration
+
+GridSight is orchestrated using Apache Airflow to automate the end-to-end forecasting workflow.
+
+Rather than executing individual scripts manually, Airflow manages task execution, scheduling, retries and dependency management, ensuring a reproducible production pipeline.
+
+The pipeline executes once per day and consists of the following tasks:
+
+```text
+Daily Ingestion
+        ↓
+Load Bronze
+        ↓
+dbt Transformations
+        ↓
+Forecast Generation
+        ↓
+Forecast Validation
+```
+
+Each task begins only after its upstream dependencies complete successfully.
+
+The DAG includes retry policies and validation checks to improve robustness against transient failures.
+
+The orchestration layer separates workflow management from business logic, allowing ingestion, transformation and forecasting components to evolve independently.
+
 ### Design Principles
 
 Each layer has a single responsibility.
@@ -313,6 +339,19 @@ Every training observation must contain the target variable.
 
 Missing predictor values are preferable to missing targets.
 
+# 14.1 Forecast Serving
+
+After feature engineering is completed, the production forecasting model generates hourly renewable energy forecasts.
+
+Forecasts are written to the `gold_forecasts` table together with metadata including:
+
+- Forecast timestamp
+- Predicted generation (MW)
+- Model version
+- Forecast creation timestamp
+
+Persisting forecasts enables downstream analytical applications to consume predictions without rerunning the machine learning pipeline.
+
 ---
 
 # 15. Feature Engineering Philosophy
@@ -394,6 +433,19 @@ Current tests:
 - Accepted values for `is_weekend`
 - Daylight progress constrained between 0 and 1
 
+# 19.1 Runtime Validation
+
+In addition to dbt data quality tests, GridSight performs runtime validation during pipeline execution.
+
+Validation includes:
+
+- Forecast table existence
+- Non-empty forecast outputs
+- Forecast creation timestamp verification
+- Required feature availability prior to inference
+
+These checks prevent incomplete or invalid datasets from propagating through the forecasting pipeline and provide an additional layer of production reliability.
+
 ---
 
 # 20. Machine Learning Experiment Methodology
@@ -428,6 +480,16 @@ For every feature version:
 6. Explain predictions using SHAP.
 
 Only one experimental variable is modified at a time to ensure that performance improvements can be attributed to a specific feature group.
+
+# 20.1 Production Data Synchronization
+
+Renewable energy datasets originate from independent external APIs that may expose different levels of data freshness.
+
+Weather, irradiance and generation observations are therefore synchronized before forecasting.
+
+Only observations containing all required predictor variables are used for inference.
+
+This prevents incomplete feature vectors from reaching the production model while maintaining consistency across all input datasets.
 
 ---
 
@@ -466,20 +528,59 @@ WAPE provides a more robust percentage-based evaluation while remaining easily i
 | V5 | Daylight Features | Solar geometry | Explicit daylight representation improves forecasts |
 | V6 | Interaction Features | Nonlinear effects | Combined variables capture physical relationships |
 
+# 22.1 Production Model Selection
+
+Following baseline model evaluation and hyperparameter optimization, a single production model is selected for operational forecasting.
+
+The selection process follows:
+
+```text
+Baseline Evaluation
+        ↓
+Hyperparameter Optimization
+        ↓
+Performance Comparison
+        ↓
+Production Model Selection
+        ↓
+Deployment
+```
+
+Ridge Regression was selected as the production model after achieving the lowest validation WAPE among all evaluated models following Optuna optimization.
+
+The final model is serialized using Joblib and loaded during each scheduled forecasting run.
+
 ---
 
 # 23. Research Methodology
 
-The research question is not fixed before experimentation.
+GridSight follows an incremental experimental methodology designed to isolate the contribution of each feature group while maintaining reproducibility.
 
-Instead:
+The experimental workflow consists of:
 
-1. Build the platform.
-2. Conduct reproducible experiments.
-3. Analyze empirical results.
-4. Draw conclusions from evidence.
+```text
+Feature Engineering Version
+            ↓
+Baseline Model Training
+            ↓
+Model Evaluation
+            ↓
+Hyperparameter Optimization
+            ↓
+Production Model Selection
+            ↓
+Feature Ablation
+            ↓
+SHAP Explainability
+            ↓
+Result Interpretation
+```
 
-This minimizes confirmation bias and improves reproducibility.
+Only one feature group is introduced between consecutive experimental versions.
+
+This controlled methodology allows performance improvements to be attributed to specific engineering decisions while minimizing experimental confounding.
+
+The final production pipeline is selected based on optimized validation performance and subsequently deployed for automated daily forecasting.
 
 ---
 
@@ -496,8 +597,27 @@ Throughout GridSight, the following principles guide implementation.
 - Change only one experimental variable at a time.
 - Build incrementally and validate every stage before moving forward.
 - Favor simple, interpretable solutions before introducing additional complexity.
+- Synchronize heterogeneous data sources before model inference.
+- Validate every pipeline stage before downstream execution.
+- Separate workflow orchestration from analytical logic.
+- Deploy only validated production models.
+- Automate forecasting through reproducible scheduled pipelines.
 
 The target variable represents average hourly power (MW). Daily forecasts are obtained by aggregating hourly predictions over 24 hours, yielding an approximation of daily energy generation (MWh).
+
+# 24.1 Dashboard Integration
+
+Forecasts generated by the production pipeline are consumed through a Streamlit dashboard.
+
+The dashboard provides:
+
+- Forecast visualizations
+- Historical generation comparisons
+- Weather and irradiance analytics
+- Model performance metrics
+- Pipeline execution status
+
+The dashboard is designed as a read-only analytical interface and does not perform model training or feature engineering.
 
 # Explainability
 

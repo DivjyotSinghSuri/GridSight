@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+from datetime import datetime, timedelta
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2] / "Desktop" / "GridSight"
 
@@ -11,7 +12,7 @@ if str(PROJECT_ROOT) not in sys.path:
     print("PROJECT_ROOT:", PROJECT_ROOT)
     print("sys.path:")
     for p in sys.path:
-    print(p)
+      print(p)
     print("=" * 80)
 
 os.chdir(PROJECT_ROOT)
@@ -66,7 +67,7 @@ with DAG(
     description="Daily GridSight ELT + Forecast Pipeline",
     default_args=default_args,
     start_date=datetime(2026, 7, 20),
-    schedule="@daily",
+    schedule="0 2 * * *",
     catchup=False,
     tags=["gridsight", "forecasting", "duckdb", "dbt"],
 ) as dag:
