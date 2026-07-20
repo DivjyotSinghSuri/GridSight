@@ -195,3 +195,6 @@ feature_table AS (
 
 SELECT *
 FROM feature_table
+WHERE
+    temperature_c IS NOT NULL
+    AND shortwave_radiation IS NOT NULL

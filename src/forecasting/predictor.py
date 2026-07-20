@@ -1,5 +1,6 @@
 import joblib
 import pandas as pd
+from datetime import datetime, UTC
 from .config import MODEL_FEATURES, PRODUCTION_MODEL_PATH
 
 def load_model():
@@ -15,19 +16,37 @@ def predict(model, X):
   return predictions
 
 def create_forecast_df(df, predictions):
-  forecast_df = df[["timestamp"]].copy()
-  forecast_df["predicted_generation_mw"] = predictions
-  return forecast_df
+
+    forecast_df = df[["timestamp"]].copy()
+    forecast_df.rename(
+        columns={
+            "timestamp": "forecast_timestamp"
+        },
+        inplace=True
+    )
+
+    forecast_df["predicted_generation_mw"] = predictions
+    forecast_df["forecast_created_at"] = datetime.now(UTC)
+    forecast_df["model_name"] = "Ridge Regression"
+    forecast_df["model_version"] = "v1.0"
+
+    forecast_df = forecast_df[
+    [
+        "forecast_created_at",
+        "forecast_timestamp",
+        "predicted_generation_mw",
+        "model_name",
+        "model_version"
+    ]
+]
+    return forecast_df
 
 def run_prediction(df):
     model = load_model()
 
     X = df.drop(columns=["timestamp"]).copy()
-
-    # Ensure exactly the same columns and order used during training
     X = X.loc[:, model.feature_names_in_]
 
-    predictions = model.predict(X)
+    predictions = predict(model, X)
 
-    forecast_df = create_forecast_df(df, predictions)
-    return forecast_df
+    return create_forecast_df(df, predictions)

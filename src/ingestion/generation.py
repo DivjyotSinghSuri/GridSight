@@ -49,21 +49,22 @@ def _generate_monthly_ranges(start_date, end_date):
         end = datetime.combine(end_date, datetime.min.time())
 
     ranges = []
-
     current = start
 
     while current < end:
-        next_month = current + relativedelta(months=1)
+        next_period = min(
+            current + relativedelta(months=1),
+            end
+        )
 
         ranges.append((
             current.strftime("%Y%m%d0000"),
-            next_month.strftime("%Y%m%d0000")
+            next_period.strftime("%Y%m%d0000")
         ))
 
-        current = next_month
+        current = next_period
 
     return ranges
-
 
 def _build_request(period_start, period_end):
     params = {
