@@ -9,3 +9,6 @@ scikit-learn
 shap
 streamlit
 apache-airflow
+plotly
+optuna
+matplotlib
