@@ -4,70 +4,158 @@
 
 # GridSight
 
-### End-to-End Renewable Energy Forecasting Platform
+### Cloud-Native Renewable Energy Forecasting Platform
 
-*A cloud-native data engineering and machine learning platform for automated solar energy forecasting.*
+*A production-style data engineering and machine learning platform for automated solar energy forecasting.*
 
-<br>
-
-![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
-![DuckDB](https://img.shields.io/badge/DuckDB-Warehouse-orange)
-![dbt](https://img.shields.io/badge/dbt-Analytics%20Engineering-FF694B)
-![Airflow](https://img.shields.io/badge/Apache%20Airflow-Orchestration-017CEE)
-![AWS S3](https://img.shields.io/badge/AWS-S3-orange)
-![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red)
-![Optuna](https://img.shields.io/badge/Optuna-Hyperparameter%20Optimization-brightgreen)
-![SHAP](https://img.shields.io/badge/SHAP-Explainability-purple)
+[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)]()
+[![DuckDB](https://img.shields.io/badge/DuckDB-Warehouse-orange)]()
+[![dbt](https://img.shields.io/badge/dbt-Analytics%20Engineering-FF694B)]()
+[![Apache Airflow](https://img.shields.io/badge/Airflow-Orchestration-017CEE)]()
+[![AWS S3](https://img.shields.io/badge/AWS-S3-orange)]()
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red)]()
+[![Optuna](https://img.shields.io/badge/Optuna-HPO-brightgreen)]()
+[![SHAP](https://img.shields.io/badge/SHAP-Explainability-purple)]()
 
 </div>
+
+---
+
+# 🚀 Live Demo
+
+**Dashboard:** https://gridsight-dashboard.streamlit.app/
+
+Explore:
+
+- Forecast Overview
+- Interactive Forecasts
+- Weather Analytics
+- Model Insights
+- Pipeline Status
+
+## 🎯 Why GridSight?
+
+GridSight demonstrates how modern data engineering and machine learning components work together in a production-style forecasting system.
+
+Key capabilities include:
+
+- Automated ELT pipeline with Apache Airflow
+- Cloud-native Bronze Data Lake using Amazon S3
+- Medallion architecture with dbt and DuckDB
+- Feature engineering framework for time-series forecasting
+- Hyperparameter optimization with Optuna
+- Explainable AI using SHAP
+- Interactive analytics dashboard with Streamlit
 
 ---
 
 # Overview
 
-GridSight is an end-to-end renewable energy forecasting platform designed to demonstrate modern data engineering, analytics engineering, and machine learning practices within a single production-style project.
+GridSight is an end-to-end renewable energy forecasting platform built to demonstrate modern **Data Engineering**, **Analytics Engineering**, and **Machine Learning** practices in a production-style workflow.
 
-The platform automates the complete forecasting lifecycle—from data ingestion and storage to feature engineering, model inference, validation, and interactive analytics.
+The platform automates the complete forecasting lifecycle—from data ingestion and transformation to feature engineering, model inference, orchestration, and interactive visualization.
 
-Unlike traditional machine learning projects that primarily focus on predictive performance, GridSight emphasizes building a reproducible, scalable, and production-oriented forecasting system.
+Unlike traditional ML projects that focus solely on model accuracy, GridSight emphasizes **building a reproducible, scalable, and cloud-native forecasting system.**
 
 ---
 
-# Project Highlights
+# ✨ Key Features
 
-- End-to-end renewable energy forecasting platform
-- Automated ELT pipeline orchestrated using Apache Airflow
-- Amazon S3 Bronze Data Lake
-- DuckDB analytical warehouse
+- Cloud-native ELT pipeline using Amazon S3, DuckDB, dbt and Airflow
 - Medallion Architecture (Bronze → Silver → Gold)
-- dbt-powered analytics engineering
-- Incremental feature engineering methodology
-- Optuna hyperparameter optimization
-- SHAP explainability
-- Production forecasting pipeline
+- Automated daily batch forecasting
+- Incremental feature engineering framework (V0 → V5)
+- Hyperparameter optimization using Optuna
+- SHAP model explainability
 - Interactive Streamlit dashboard
-- Research-oriented experimental framework
+- Production-ready modular architecture
 
 ---
 
-# Architecture
+# 📊 Dashboard Showcase
 
-<div align="center">
+## Overview
 
-<img src="assets/architecture.png" width="1000">
+<img src="assets/dashboard/01-overview.png">
 
-</div>
+---
 
-The GridSight architecture follows a modern cloud-native analytics workflow.
+## Forecast
+
+<img src="assets/dashboard/02-forecast.png">
+
+---
+
+## Weather
+
+<img src="assets/dashboard/03-weather.png">
+
+---
+
+## Model Insights
+
+<img src="assets/dashboard/04-model-insights.png">
+
+---
+
+## Pipeline Status
+
+<img src="assets/dashboard/05-pipeline-status.png">
+
+---
+
+# 🏗️ System Architecture
+
+<img src="assets/architecture.png">
+
+GridSight follows a modern cloud-native architecture that separates ingestion, storage, transformation, feature engineering, forecasting, orchestration, and visualization into independent layers for improved scalability and maintainability.
+
+---
+
+# 🛠️ Technology Stack
+
+| Layer | Technology |
+|--------|------------|
+| Programming | Python |
+| Query Language | SQL |
+| Cloud Storage | Amazon S3 |
+| Data Warehouse | DuckDB |
+| Analytics Engineering | dbt Core |
+| Workflow Orchestration | Apache Airflow |
+| Machine Learning | Scikit-learn |
+| Hyperparameter Optimization | Optuna |
+| Explainability | SHAP |
+| Dashboard | Streamlit |
+| Version Control | Git & GitHub |
+
+---
+
+# 📡 Data Sources
+
+GridSight combines multiple public datasets to generate hourly solar energy forecasts for Germany.
+
+| Source | Data |
+|--------|------|
+| Open-Meteo Weather API | Temperature, Humidity, Cloud Cover, Wind Speed, Precipitation |
+| Open-Meteo Solar API | Global Horizontal Irradiance (GHI), Direct & Diffuse Radiation |
+| Open-Meteo Daily API | Sunrise, Sunset, Daylight Duration |
+| ENTSO-E Transparency Platform | Actual Solar Generation |
+
+Weather and irradiance data are collected from **25 geographically distributed locations** across Germany before being aggregated into a unified hourly dataset.
+
+---
+
+# ⚙️ Pipeline Workflow
+
+<img src="assets/airflow_pipeline.png">
+
+The entire forecasting workflow is orchestrated using **Apache Airflow**, enabling automated daily execution from data ingestion through dashboard updates.
 
 ```text
 Public APIs
       │
       ▼
-Python Ingestion
-      │
-      ▼
-Amazon S3 Bronze Data Lake
+Amazon S3 Bronze Layer
       │
       ▼
 DuckDB Warehouse
@@ -79,7 +167,7 @@ dbt Transformations
 Feature Engineering
       │
       ▼
-Production Machine Learning
+Model Inference
       │
       ▼
 Forecast Validation
@@ -88,167 +176,28 @@ Forecast Validation
 Streamlit Dashboard
 ```
 
-The architecture separates ingestion, storage, transformation, feature engineering, forecasting, and visualization into independent layers, improving maintainability, reproducibility, and scalability.
-
 ---
 
-# Technology Stack
+# 🥇 Medallion Architecture
 
-GridSight integrates modern data engineering, analytics engineering, and machine learning technologies to build a reproducible forecasting platform.
-
-| Layer | Technology | Purpose |
-|--------|------------|---------|
-| Query Language | SQL | Data transformation and analytics |
-| Programming | Python | Data ingestion, feature engineering and forecasting |
-| Cloud Storage | Amazon S3 | Immutable Bronze Data Lake |
-| Analytical Warehouse | DuckDB | High-performance analytical database |
-| Analytics Engineering | dbt Core | Data transformations and testing |
-| Workflow Orchestration | Apache Airflow | Automated daily pipeline execution |
-| Machine Learning | Scikit-learn | Forecasting models |
-| Hyperparameter Optimization | Optuna | Automated model tuning |
-| Explainability | SHAP | Model interpretation |
-| Dashboard | Streamlit | Interactive analytics dashboard |
-| Version Control | Git & GitHub | Source code management |
-
----
-
-# Data Sources
-
-GridSight combines multiple publicly available renewable energy datasets to construct a unified forecasting dataset.
-
-| Source | Data | Granularity |
-|---------|------|-------------|
-| Open-Meteo Weather API | Temperature, Humidity, Cloud Cover, Wind Speed, Precipitation | Hourly |
-| Open-Meteo Solar API | Global Horizontal Irradiance, Direct Radiation, Diffuse Radiation | Hourly |
-| Open-Meteo Daily API | Sunrise, Sunset, Daylight Duration | Daily |
-| ENTSO-E Transparency Platform | Actual Solar Generation | 15 Minutes |
-
-Weather and irradiance observations are collected from **25 geographically distributed sampling locations** across Germany before being spatially aggregated into national hourly observations.
-
-Generation data is aggregated from **15-minute average power measurements** to an hourly time series, ensuring a consistent temporal grain across all datasets.
-
----
-
-# Pipeline Workflow
-
-The entire forecasting workflow is fully automated using Apache Airflow.
-
-<div align="center">
-
-<img src="assets/airflow_pipeline.png" width="900">
-
-</div>
-
-The daily workflow executes in the following order:
-
-```text
-Daily API Ingestion
-        │
-        ▼
-Amazon S3 Bronze Storage
-        │
-        ▼
-DuckDB Bronze Loading
-        │
-        ▼
-dbt Transformations
-(Bronze → Silver → Gold)
-        │
-        ▼
-Feature Engineering
-        │
-        ▼
-Production Forecast Generation
-        │
-        ▼
-Forecast Validation
-        │
-        ▼
-Streamlit Dashboard
-```
-
-Each stage begins only after the successful completion of its upstream dependency, ensuring reliable and reproducible daily forecasting.
-
-Runtime validation is performed throughout the pipeline to detect missing data, incomplete feature vectors, and invalid forecast outputs before predictions are persisted.
-
----
-
-# Data Architecture
-
-GridSight follows the **Medallion Architecture**, separating raw, standardized, and analytical datasets into independent layers.
-
-<div align="center">
-
-<img src="assets/medallion_architecture.png" width="900">
-
-</div>
+<img src="assets/medallion_architecture.png">
 
 | Layer | Purpose |
-|-------|---------|
-| Bronze | Immutable raw API responses stored in Amazon S3 |
-| Silver | Cleaned, standardized, and integrated datasets |
-| Gold | Machine-learning-ready feature tables |
+|--------|---------|
+| 🟤 Bronze | Raw immutable API data stored in Amazon S3 |
+| ⚪ Silver | Cleaned and standardized datasets |
+| 🟡 Gold | Machine-learning-ready feature tables |
 
-This layered approach improves reproducibility, data lineage, and maintainability while ensuring that every transformation remains traceable back to the original source data.
-
-The Gold layer contains the complete feature set required for model training and production inference, eliminating the need for additional preprocessing during forecasting.
+This layered architecture improves reproducibility, data lineage, and maintainability while keeping raw and transformed data clearly separated.
 
 ---
 
-# Machine Learning Methodology
+# 🧠 Feature Engineering
 
-GridSight follows an incremental feature engineering methodology designed to evaluate the contribution of each feature group under controlled experimental conditions.
+Feature engineering was developed incrementally to measure the impact of each feature group on forecasting accuracy.
 
-Rather than introducing all engineered features simultaneously, feature groups are added progressively, allowing performance improvements to be attributed to specific engineering decisions.
-
-<div align="center">
-
-<img src="assets/ml_pipeline.png" width="900">
-
-</div>
-
-The experimentation workflow follows the sequence below.
-
-```text
-Gold Feature Dataset
-        │
-        ▼
-Feature Engineering Versions (V0 → V5)
-        │
-        ▼
-Baseline Model Training
-        │
-        ▼
-Performance Evaluation
-        │
-        ▼
-Hyperparameter Optimization
-        │
-        ▼
-Production Model Selection
-        │
-        ▼
-Feature Ablation
-        │
-        ▼
-SHAP Explainability
-        │
-        ▼
-Daily Batch Forecasting
-```
-
-Only one feature group is introduced between consecutive versions, ensuring that performance improvements remain measurable and reproducible.
-
----
-
-# Feature Engineering
-
-Feature engineering is the primary focus of GridSight.
-
-Each feature group is introduced independently before evaluating its impact on forecasting accuracy.
-
-| Version | Feature Group |
-|----------|---------------|
+| Version | Added Features |
+|----------|----------------|
 | V0 | Historical Generation Baseline |
 | V1 | Weather & Solar Irradiance |
 | V2 | Calendar Features |
@@ -256,27 +205,27 @@ Each feature group is introduced independently before evaluating its impact on f
 | V4 | Rolling Statistics |
 | V5 | Daylight & Interaction Features |
 
-The final production dataset contains:
+The final production dataset includes:
 
 - Historical lag features
 - Rolling statistical features
 - Weather observations
 - Solar irradiance measurements
-- Daylight characteristics
 - Calendar variables
-- Interaction features
+- Daylight characteristics
+- Feature interactions
 
 ---
 
-# Model Development
+# 🤖 Model Development
 
-Three forecasting models were evaluated using identical datasets and train/test splits.
+Three forecasting models were trained and evaluated using identical train/test splits.
 
-| Model | Purpose |
-|--------|---------|
-| Ridge Regression | Linear baseline and production model |
-| XGBoost | Gradient boosting benchmark |
-| LightGBM | Histogram-based gradient boosting benchmark |
+| Model | Role |
+|--------|------|
+| Ridge Regression | ✅ Production Model |
+| XGBoost | Benchmark |
+| LightGBM | Benchmark |
 
 Each model was evaluated using:
 
@@ -284,211 +233,147 @@ Each model was evaluated using:
 - MAE
 - RMSE
 
-Hyperparameter optimization was performed using Optuna before selecting the final production model.
+Hyperparameter optimization was performed using **Optuna**, followed by feature ablation and SHAP explainability to validate the final production model.
 
 ---
 
-# Experimental Results
+# 📈 Results
 
-<div align="center">
+<img src="assets/results/model_comparison.png">
 
-<img src="assets/results/model_comparison.png" width="900">
+| Model | WAPE |
+|--------|-----:|
+| 🥇 Ridge Regression | **7.79%** |
+| XGBoost | 10.48% |
+| LightGBM | 10.79% |
 
-</div>
+### Key Findings
 
-| Model | Optimized | WAPE |
-|--------|:---------:|-----:|
-| Ridge Regression | ✅ | **7.79%** |
-| XGBoost | ✅ | 10.48% |
-| LightGBM | ✅ | 10.79% |
+- Rolling statistical features produced the largest performance improvement.
+- Feature engineering had a greater impact than increasing model complexity.
+- Ridge Regression achieved the best forecasting accuracy after Optuna optimization.
 
-Key observations:
+# ✅ Data Quality & Validation
 
-- Rolling statistical features produced the largest improvement.
-- Interaction features further improved forecasting performance.
-- Ridge Regression achieved the best overall forecasting accuracy following hyperparameter optimization.
-- Feature engineering contributed more to predictive performance than increasing model complexity.
+To ensure reliable forecasts, GridSight performs automated validation throughout the pipeline before model inference.
 
----
-
-# Explainability
-
-<div align="center">
-
-<img src="assets/results/shap_summary.png" width="900">
-
-</div>
-
-Model predictions are interpreted using SHAP (SHapley Additive exPlanations).
-
-Explainability is used to:
-
-- Rank feature importance
-- Understand local model predictions
-- Validate feature engineering decisions
-- Compare learned relationships with domain knowledge
-
-SHAP analysis is performed only after selecting the final production model.
-
----
-
----
-
-# Production Pipeline
-
-GridSight is designed as an automated batch forecasting platform where the complete forecasting workflow executes without manual intervention.
-
-Apache Airflow orchestrates every stage of the pipeline, ensuring data dependencies are respected and forecasts are generated only after successful upstream execution.
-
-<div align="center">
-
-<img src="assets/production_pipeline.png" width="900">
-
-</div>
-
-The production pipeline consists of the following stages:
-
-| Stage | Description |
-|--------|-------------|
-| API Ingestion | Collects weather, solar irradiance, daylight, and generation data |
-| Bronze Loading | Stores immutable raw datasets in Amazon S3 |
-| Warehouse Loading | Loads raw datasets into DuckDB |
-| dbt Transformations | Creates standardized Silver and Gold tables |
-| Feature Engineering | Generates production-ready model features |
-| Forecast Generation | Produces hourly solar generation forecasts |
-| Validation | Verifies feature completeness and forecast quality |
-| Dashboard Refresh | Makes the latest forecasts available through Streamlit |
-
-The modular design enables each component to be developed, tested, and maintained independently while ensuring a reliable end-to-end forecasting workflow.
-
----
-
-# Data Quality & Validation
-
-Reliable forecasts require reliable data.
-
-GridSight incorporates automated validation checks throughout the pipeline to identify incomplete or inconsistent data before model inference.
-
-The validation framework includes:
+Validation checks include:
 
 - Dataset existence verification
-- Empty table detection
 - Required column validation
-- Timestamp consistency checks
+- Timestamp consistency
 - Missing feature detection
 - Null value validation
 - Forecast completeness verification
 
-These checks prevent invalid forecasts from being generated while improving the robustness of the production workflow.
+These checks prevent invalid data from propagating through the forecasting pipeline.
 
 ---
 
-# Dashboard
-
-GridSight includes an interactive Streamlit dashboard for exploring forecasts, historical generation, weather conditions, and model performance.
-
-<div align="center">
-
-<img src="assets/dashboard/dashboard_overview.png" width="1000">
-
-</div>
-
-The dashboard provides four analytical views.
-
-| Page | Purpose |
-|------|---------|
-| Forecast Overview | Visualize historical and predicted solar generation |
-| Weather Analytics | Explore meteorological conditions and irradiance |
-| Model Performance | Evaluate forecasting accuracy and model metrics |
-| Pipeline Health | Monitor pipeline execution and data freshness |
-
-The dashboard automatically reflects the latest forecasts generated by the production pipeline, providing an up-to-date view of renewable energy generation.
-
----
-
-# Repository Structure
+# 📂 Repository Structure
 
 ```text
 GridSight/
 │
-├── airflow/                  # Workflow orchestration
-├── assets/                   # README images and diagrams
-├── dashboard/                # Streamlit application
-├── database/                 # DuckDB warehouse
-├── dbt/                      # dbt project
-│   ├── models/
-│   ├── tests/
-│   └── macros/
-├── models/                   # Trained ML models
-├── notebooks/                # Research notebooks
+├── airflow/                 # Airflow DAGs
+├── assets/                  # README images & diagrams
+├── database/                # DuckDB warehouse
+├── dbt/                     # dbt project
+├── models/                  # Trained models & metrics
+├── notebooks/               # Research notebooks
 ├── src/
-│   ├── ingestion/
-│   ├── preprocessing/
 │   ├── feature_engineering/
 │   ├── forecasting/
+│   ├── ingestion/
+│   ├── preprocessing/
 │   ├── validation/
 │   └── utils/
+├── streamlit_app/           # Interactive dashboard
 ├── requirements.txt
 └── README.md
 ```
 
-The repository follows a modular architecture that separates ingestion, transformation, feature engineering, forecasting, validation, orchestration, and visualization into independent components.
+---
+
+# 🚀 Getting Started
+
+## Clone the Repository
+
+```bash
+git clone https://github.com/<your-username>/GridSight.git
+cd GridSight
+```
+
+## Create a Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+Activate it:
+
+**Windows**
+
+```bash
+.venv\Scripts\activate
+```
+
+**macOS / Linux**
+
+```bash
+source .venv/bin/activate
+```
+
+## Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## Launch the Dashboard
+
+```bash
+streamlit run streamlit_app/app.py
+```
+
+The dashboard will open at:
+
+```
+http://localhost:8501
+```
 
 ---
 
-# Results at a Glance
+# 📊 Results at a Glance
 
-| Metric | Result |
-|---------|-------:|
+| Metric | Value |
+|---------|------:|
 | Production Model | Ridge Regression |
 | Final WAPE | **7.79%** |
-| Hyperparameter Optimization | Optuna |
-| Explainability | SHAP |
-| Storage Layer | Amazon S3 |
-| Analytical Warehouse | DuckDB |
-| Data Transformations | dbt Core |
-| Workflow Orchestration | Apache Airflow |
+| Weather Sampling Locations | **25** |
+| Architecture | Medallion (Bronze → Silver → Gold) |
+| Storage | Amazon S3 |
+| Warehouse | DuckDB |
+| Transformations | dbt Core |
+| Orchestration | Apache Airflow |
 | Dashboard | Streamlit |
-| Pipeline | Fully Automated Batch Forecasting |
 
 ---
 
-# Key Achievements
-
-GridSight demonstrates the implementation of a complete production-style renewable energy forecasting platform.
-
-Major outcomes include:
-
-- Automated end-to-end ELT pipeline
-- Cloud-native Bronze Data Lake using Amazon S3
-- DuckDB analytical warehouse
-- dbt-powered Medallion Architecture
-- Incremental feature engineering framework (V0–V5)
-- Hyperparameter optimization using Optuna
-- SHAP-based model explainability
-- Automated production forecasting pipeline
-- Interactive Streamlit dashboard
-- Fully orchestrated workflow using Apache Airflow
-
----
-
-# Future Enhancements
-
-Potential extensions to the platform include:
+# 🔮 Future Enhancements
 
 - Docker containerization
-- Cloud deployment on AWS
-- CI/CD pipeline using GitHub Actions
-- Real-time streaming ingestion with Apache Kafka
+- AWS cloud deployment
+- CI/CD with GitHub Actions
+- Real-time streaming using Apache Kafka
 - Automated model retraining
-- Model monitoring and drift detection
-- Multiple renewable energy sources (Wind & Hydro)
-- Multi-region forecasting support
-- REST API for forecast serving
+- Model drift monitoring
+- Wind & hydro forecasting
+- Multi-region forecasting
 
 ---
 
-# Acknowledgements
+# 🙏 Acknowledgements
 
 GridSight is built using open-source technologies and publicly available datasets.
 
@@ -510,20 +395,20 @@ GridSight is built using open-source technologies and publicly available dataset
 - Open-Meteo Solar API
 - ENTSO-E Transparency Platform
 
-Special thanks to the maintainers and contributors of these projects for making renewable energy analytics more accessible.
-
 ---
 
-# License
+# 📄 License
 
 This project is licensed under the MIT License.
 
-See the `LICENSE` file for additional information.
+See the `LICENSE` file for details.
 
 ---
 
 <div align="center">
 
-### If you found this project interesting, consider giving it a ⭐
+### ⭐ If you found this project useful, consider giving it a star!
+
+**Built by Divjyot Singh Suri**
 
 </div>
