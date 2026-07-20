@@ -149,3 +149,103 @@ def database_is_reachable() -> bool:
 
 def today_utc():
     return datetime.now(timezone.utc).date()
+
+
+def _format_number(value, decimals: int = 0, comma: bool = True) -> str:
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return "—"
+
+    fmt = f"{{:,.{decimals}f}}" if comma else f"{{:.{decimals}f}}"
+    return fmt.format(value)
+
+
+def format_power(value, unit: str = "MW") -> str:
+    if value is None or pd.isna(value):
+        return "—"
+
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return str(value)
+
+    decimals = 0 if abs(value) >= 100 else 1
+    return f"{_format_number(value, decimals)} {unit}"
+
+
+def format_energy(value, unit: str = "MWh") -> str:
+    if value is None or pd.isna(value):
+        return "—"
+    try:
+        return f"{_format_number(value, 0)} {unit}"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def format_temperature(value) -> str:
+    if value is None or pd.isna(value):
+        return "—"
+    try:
+        return f"{float(value):.1f} °C"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def format_percentage(value, decimals: int = 2) -> str:
+    if value is None or pd.isna(value):
+        return "—"
+    try:
+        return f"{float(value):.{decimals}f}%"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def format_humidity(value) -> str:
+    if value is None or pd.isna(value):
+        return "—"
+    try:
+        return f"{float(value):.1f} %"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def format_wind_speed(value) -> str:
+    if value is None or pd.isna(value):
+        return "—"
+    try:
+        return f"{float(value):.1f} km/h"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def format_cloud_cover(value) -> str:
+    if value is None or pd.isna(value):
+        return "—"
+    try:
+        return f"{int(round(float(value)))}%"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def format_precipitation(value) -> str:
+    if value is None or pd.isna(value):
+        return "—"
+    try:
+        return f"{float(value):.2f} mm"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def format_timestamp(value) -> str:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return "—"
+    if isinstance(value, (pd.Timestamp, datetime)):
+        try:
+            return value.strftime("%Y-%m-%d %H:%M")
+        except Exception:
+            return str(value)
+    try:
+        return str(value)
+    except Exception:
+        return "—"

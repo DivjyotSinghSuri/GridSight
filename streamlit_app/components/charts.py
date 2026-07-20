@@ -50,8 +50,9 @@ def forecast_line_chart(
             y=1.02,
             x=0,
         ),
-        xaxis_title=None,
+        xaxis_title="Time",
         yaxis_title="Generation (MW)",
+        hovermode="x unified",
         height=380,
     )
 
@@ -94,6 +95,7 @@ def daily_trend_chart(forecast_df: pd.DataFrame) -> go.Figure:
         margin=dict(l=10, r=10, t=30, b=10),
         xaxis_title="Time",
         yaxis_title="Generation (MW)",
+        hovermode="x unified",
         height=320,
     )
 

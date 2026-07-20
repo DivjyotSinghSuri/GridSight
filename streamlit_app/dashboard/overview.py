@@ -20,6 +20,15 @@ from ..components.charts import (
 )
 
 from ..components.utils import (
+    format_cloud_cover,
+    format_energy,
+    format_humidity,
+    format_percentage,
+    format_power,
+    format_precipitation,
+    format_temperature,
+    format_timestamp,
+    format_wind_speed,
     load_latest_forecast_window,
     load_historical_generation,
     load_latest_weather,
@@ -50,21 +59,14 @@ def _safe_metric(value, suffix=""):
 def _status_banner(forecast_df, historical_df):
     if forecast_df.empty:
         st.warning(
-            """
-No forecast has been generated yet.
-
-Run the production inference pipeline to populate
-`gold_forecasts`.
-"""
+            "Forecast data is not yet available. "
+            "Once the forecasting pipeline completes, the forecast overview will update automatically."
         )
 
     elif historical_df.empty:
         st.warning(
-            """
-Historical generation data could not be loaded.
-
-Check the dbt pipeline.
-"""
+            "Historical generation data is currently unavailable. "
+            "This section will populate once the historical pipeline refreshes."
         )
 
     else:
@@ -113,35 +115,17 @@ def render_overview():
     # ------------------------------------------------------
 
     if not forecast_df.empty:
-
-        current_forecast = (
-            f"{forecast_df['predicted_generation_mw'].iloc[-1]:.2f} MW"
-        )
-
-        forecast_peak = (
-            f"{forecast_df['predicted_generation_mw'].max():.2f} MW"
-        )
-
+        current_forecast = format_power(forecast_df["predicted_generation_mw"].iloc[-1])
+        forecast_peak = format_power(forecast_df["predicted_generation_mw"].max())
     else:
-
         current_forecast = "No Forecast"
-
         forecast_peak = "No Forecast"
 
     if not today_rows.empty:
-
-        today_peak = (
-            f"{today_rows['solar_generation_mw'].max():.2f} MW"
-        )
-
-        today_energy = (
-            f"{today_rows['solar_generation_mw'].sum():.1f} MWh"
-        )
-
+        today_peak = format_power(today_rows["solar_generation_mw"].max())
+        today_energy = format_energy(today_rows["solar_generation_mw"].sum())
     else:
-
         today_peak = "—"
-
         today_energy = "—"
 
     metric_row(
@@ -160,7 +144,7 @@ def render_overview():
             },
             {
                 "label": "Model WAPE",
-                "value": f"{metrics.get('test_wape_pct', 0):.2f}%",
+                "value": format_percentage(metrics.get("test_wape_pct", None)),
             },
             {
                 "label": "Active Model",
@@ -192,12 +176,14 @@ def render_overview():
         if forecast_df.empty:
 
             st.info(
-                "Forecast data will appear here after the production inference pipeline writes to `gold_forecasts`."
+                "Forecast results are not yet available. "
+                "Please check back after the next pipeline run."
             )
 
         else:
 
             fig = forecast_line_chart(forecast_df)
+            fig.update_layout(title_text="Forecast Overview")
 
             st.plotly_chart(
                 fig,
@@ -241,8 +227,10 @@ def render_overview():
     st.subheader("Historical vs Forecast")
 
     if historical_df.empty and forecast_df.empty:
-
-        st.info("Historical and forecast data are currently unavailable.")
+        st.info(
+            "Historical and forecast data are not available at this time. "
+            "Once the data warehouse is refreshed, this overview will display the latest trends."
+        )
 
     else:
 
@@ -252,6 +240,7 @@ def render_overview():
             if not historical_df.empty
             else None,
         )
+        fig.update_layout(title_text="Historical vs Forecast")
 
         st.plotly_chart(
             fig,
@@ -268,12 +257,15 @@ def render_overview():
     st.subheader("Daily Generation Trend")
 
     if historical_df.empty:
-
-        st.info("No historical generation data available.")
+        st.info(
+            "Historical generation data is not available. "
+            "This chart will update after the next historical ingestion completes."
+        )
 
     else:
 
         fig = daily_trend_chart(historical_df)
+        fig.update_layout(title_text="Daily Generation Trend")
 
         st.plotly_chart(
             fig,
@@ -300,52 +292,16 @@ def render_overview():
     else:
 
         with c1:
-            st.metric(
-                "Temperature",
-                _safe_metric(
-                    weather.get("temperature_c"),
-                    " °C",
-                ),
-            )
-
-            st.metric(
-                "Humidity",
-                _safe_metric(
-                    weather.get("relative_humidity_pct"),
-                    "%",
-                ),
-            )
+            st.metric("Temperature", format_temperature(weather.get("temperature_c")))
+            st.metric("Humidity", format_humidity(weather.get("relative_humidity_pct")))
 
         with c2:
-            st.metric(
-                "Cloud Cover",
-                _safe_metric(
-                    weather.get("cloud_cover_pct"),
-                    "%",
-                ),
-            )
-
-            st.metric(
-                "Wind Speed",
-                _safe_metric(
-                    weather.get("wind_speed_kmh"),
-                    " km/h",
-                ),
-            )
+            st.metric("Cloud Cover", format_cloud_cover(weather.get("cloud_cover_pct")))
+            st.metric("Wind Speed", format_wind_speed(weather.get("wind_speed_kmh")))
 
         with c3:
-            st.metric(
-                "Precipitation",
-                _safe_metric(
-                    weather.get("precipitation_mm"),
-                    " mm",
-                ),
-            )
-
-            st.metric(
-                "Timestamp",
-                str(weather.get("timestamp", "—")),
-            )
+            st.metric("Precipitation", format_precipitation(weather.get("precipitation_mm")))
+            st.metric("Timestamp", format_timestamp(weather.get("timestamp")))
 
         with c4:
 
@@ -375,8 +331,10 @@ def render_overview():
     st.subheader("Daylight Summary")
 
     if daylight.empty:
-
-        st.info("No daylight information available.")
+        st.info(
+            "Daylight summary data is currently unavailable. "
+            "It will appear once the daylight dataset is populated."
+        )
 
     else:
 

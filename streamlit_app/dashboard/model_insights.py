@@ -11,7 +11,7 @@ def render_model_insights():
     )
 
     try:
-        from ..components.utils import load_metrics
+        from ..components.utils import format_percentage, load_metrics
 
         metrics = load_metrics()
 
@@ -23,19 +23,21 @@ def render_model_insights():
             st.metric("Version", metrics.get("model_version", "—"))
         with c3:
             wape = metrics.get("test_wape_pct", None)
-            st.metric("Test WAPE", f"{wape:.2f}%" if wape is not None else "N/A")
+            st.metric("Test WAPE", format_percentage(wape) if wape is not None else "—")
 
-        # SHAP visualization if available
         shap_path = Path(SHAP_IMAGE_PATH)
         if shap_path.exists():
             st.subheader("Feature Importance")
-            st.image(str(shap_path), use_column_width=True)
-            st.caption("SHAP summary plot from model evaluation artifacts.")
+            st.image(str(shap_path), width=800)
+            st.caption("Feature importance visualizations for the current model checkpoint.")
         else:
             st.info(
-                "Feature importance visualization is not available. "
-                "SHAP artifacts are not present in the models/ directory."
+                "Feature importance visualizations have not been generated for this model yet. "
+                "Check back once explainability artifacts become available."
             )
 
     except Exception:
-        st.info("Model metrics unavailable.")
+        st.info(
+            "Model performance metadata is currently unavailable. "
+            "Please return once the evaluation artifacts are present."
+        )

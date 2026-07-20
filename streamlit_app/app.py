@@ -38,7 +38,11 @@ st.markdown(
     """
     <style>
         .block-container {padding-top: 2rem; padding-bottom: 3rem;}
-        [data-testid="stMetricValue"] {font-size: 1.6rem;}
+        [data-testid="stMetricValue"] {
+            font-size: 1.4rem;
+            white-space: normal;
+            word-break: break-word;
+        }
         [data-testid="stMetricLabel"] {font-size: 0.85rem; color: #6B7280;}
     </style>
     """,
