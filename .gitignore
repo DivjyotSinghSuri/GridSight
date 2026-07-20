@@ -9,10 +9,13 @@ __pycache__/
 # Environment Variables
 .env
 
+# DuckDB
+*.duckdb
+
 # dbt
-target/
-dbt_packages/
-logs/
+gridsight_dbt/target/
+gridsight_dbt/dbt_packages/
+gridsight_dbt/logs/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -23,8 +26,10 @@ logs/
 # VS Code
 .vscode/
 
-# Models
-*.pkl
+# Models (optional)
+# Uncomment if you don't want to version models
+# *.joblib
+# *.pkl
 
 # Logs
 logs/
