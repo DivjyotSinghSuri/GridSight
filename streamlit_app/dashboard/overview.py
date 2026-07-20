@@ -13,19 +13,20 @@ Read-only dashboard.
 import streamlit as st
 import pandas as pd
 
-from components.metric_cards import metric_row
-from components.charts import (
+from ..components.metric_cards import metric_row
+from ..components.charts import (
     forecast_line_chart,
     daily_trend_chart,
 )
 
-from components.utils import (
+from ..components.utils import (
     load_latest_forecast_window,
     load_historical_generation,
     load_latest_weather,
     load_latest_daylight,
     load_metrics,
     today_utc,
+    last_pipeline_run_utc,
 )
 
 
@@ -150,23 +151,28 @@ def render_overview():
                 "value": current_forecast,
             },
             {
-                "label": "Today's Peak",
+                "label": "Peak Forecast (Today)",
                 "value": today_peak,
             },
             {
-                "label": "Today's Energy",
+                "label": "Total Forecast Energy (Today)",
                 "value": today_energy,
             },
             {
-                "label": "Test WAPE",
-                "value": f"{metrics.get('test_wape_pct',0):.2f}%",
+                "label": "Model WAPE",
+                "value": f"{metrics.get('test_wape_pct', 0):.2f}%",
             },
             {
-                "label": "Model",
-                "value": metrics.get(
-                    "model_name",
-                    "Ridge Regression",
-                ),
+                "label": "Active Model",
+                "value": metrics.get("model_name", "Ridge Regression"),
+            },
+            {
+                "label": "Model Version",
+                "value": metrics.get("model_version", "v1.0"),
+            },
+            {
+                "label": "Forecast Generated At",
+                "value": last_pipeline_run_utc(),
             },
         ]
     )
@@ -195,7 +201,7 @@ def render_overview():
 
             st.plotly_chart(
                 fig,
-                use_container_width=True,
+                width='stretch',
                 key="overview_forecast_chart",
             )
 
@@ -249,7 +255,7 @@ def render_overview():
 
         st.plotly_chart(
             fig,
-            use_container_width=True,
+            width='stretch',
             key="overview_historical_forecast",
         )
 
@@ -271,7 +277,7 @@ def render_overview():
 
         st.plotly_chart(
             fig,
-            use_container_width=True,
+            width='stretch',
             key="overview_daily_generation",
         )
 

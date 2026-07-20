@@ -1,8 +1,8 @@
 """Custom sidebar: logo, navigation, and status footer."""
 import streamlit as st
 
-from config import PAGE_ICON, NAV_PAGES
-from components.utils import load_metrics, last_pipeline_run_utc, database_is_reachable
+from ..config import PAGE_ICON, NAV_PAGES
+from .utils import load_metrics, last_pipeline_run_utc, database_is_reachable
 
 
 def render_sidebar() -> str:

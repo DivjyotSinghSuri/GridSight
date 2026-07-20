@@ -10,12 +10,23 @@ Run with:
     cd streamlit_app
     streamlit run app.py
 """
+import sys
+from pathlib import Path
+
+# Ensure the repository root is on sys.path so absolute package imports
+# (e.g., `import streamlit_app.config`) work when running this script
+# from the `streamlit_app/` directory (Streamlit runs scripts as __main__).
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import streamlit as st
 
-from .config import PAGE_TITLE, PAGE_ICON
-from .components.sidebar import render_sidebar
-from .dashboard.overview import render_overview
-from .dashboard.forecast import render_forecasts
+from streamlit_app.config import PAGE_TITLE, PAGE_ICON
+from streamlit_app.components.sidebar import render_sidebar
+from streamlit_app.dashboard.overview import render_overview
+from streamlit_app.dashboard.forecast import render_forecasts
+from streamlit_app.dashboard.weather import render_weather
+from streamlit_app.dashboard.model_insights import render_model_insights
+from streamlit_app.dashboard.pipeline_status import render_pipeline_status
 
 st.set_page_config(
     page_title=PAGE_TITLE,
@@ -38,5 +49,13 @@ page = render_sidebar()
 
 if page == "Overview":
     render_overview()
-if page == "Forecast":
+elif page == "Forecast":
     render_forecasts()
+elif page == "Weather":
+    render_weather()
+elif page == "Model Insights":
+    render_model_insights()
+elif page == "Pipeline Status":
+    render_pipeline_status()
+else:
+    st.info("Selected page is not implemented.")

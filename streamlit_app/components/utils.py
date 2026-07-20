@@ -14,7 +14,7 @@ import duckdb
 import pandas as pd
 import streamlit as st
 
-from config import (
+from ..config import (
     DATABASE_PATH,
     FORECAST_TABLE,
     GENERATION_VIEW,

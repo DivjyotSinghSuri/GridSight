@@ -8,7 +8,7 @@ anywhere in this app.
 import pandas as pd
 import plotly.graph_objects as go
 
-from config import PRIMARY_COLOR, ACCENT_COLOR
+from ..config import PRIMARY_COLOR, ACCENT_COLOR
 
 
 def forecast_line_chart(
@@ -68,12 +68,23 @@ def daily_trend_chart(forecast_df: pd.DataFrame) -> go.Figure:
 
     fig = go.Figure()
 
+    # Support both forecast and historical DataFrames by selecting an
+    # appropriate y-series if present.
+    if "predicted_generation_mw" in forecast_df.columns:
+        y_series = forecast_df["predicted_generation_mw"]
+        series_name = "Forecast"
+    elif "solar_generation_mw" in forecast_df.columns:
+        y_series = forecast_df["solar_generation_mw"]
+        series_name = "Actual"
+    else:
+        return go.Figure()
+
     fig.add_trace(
         go.Scatter(
             x=forecast_df["timestamp"],
-            y=forecast_df["predicted_generation_mw"],
+            y=y_series,
             mode="lines+markers",
-            name="Forecast",
+            name=series_name,
             line=dict(color=PRIMARY_COLOR, width=3),
         )
     )
