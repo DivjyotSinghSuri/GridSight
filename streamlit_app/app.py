@@ -12,9 +12,10 @@ Run with:
 """
 import streamlit as st
 
-from config import PAGE_TITLE, PAGE_ICON
-from components.sidebar import render_sidebar
-from views.overview import render_overview
+from .config import PAGE_TITLE, PAGE_ICON
+from .components.sidebar import render_sidebar
+from .dashboard.overview import render_overview
+from .dashboard.forecast import render_forecasts
 
 st.set_page_config(
     page_title=PAGE_TITLE,
@@ -37,5 +38,5 @@ page = render_sidebar()
 
 if page == "Overview":
     render_overview()
-else:
-    st.info(f"**{page}** page is coming next — Overview is being reviewed first.")
+if page == "Forecast":
+    render_forecasts()
