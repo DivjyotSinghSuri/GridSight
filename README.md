@@ -82,25 +82,25 @@ Unlike traditional ML projects that focus solely on model accuracy, GridSight em
 
 ## Forecast
 
-<img src="assets/dashboard/02-forecast.png">
+<img src="assets/dashboard/05-historical-vs-forecast.png">
 
 ---
 
 ## Weather
 
-<img src="assets/dashboard/03-weather.png">
+<img src="assets/dashboard/02-weather.png">
 
 ---
 
 ## Model Insights
 
-<img src="assets/dashboard/04-model-insights.png">
+<img src="assets/dashboard/03-model-insights.png">
 
 ---
 
 ## Pipeline Status
 
-<img src="assets/dashboard/05-pipeline-status.png">
+<img src="assets/dashboard/04-pipeline-status.png">
 
 ---
 
@@ -147,7 +147,7 @@ Weather and irradiance data are collected from **25 geographically distributed l
 
 # ⚙️ Pipeline Workflow
 
-<img src="assets/airflow_pipeline.png">
+<img src="assets/gridsight_pipeline-graph.png">
 
 The entire forecasting workflow is orchestrated using **Apache Airflow**, enabling automated daily execution from data ingestion through dashboard updates.
 
@@ -180,7 +180,7 @@ Streamlit Dashboard
 
 # 🥇 Medallion Architecture
 
-<img src="assets/medallion_architecture.png">
+<img src="assets/lineage_graph.png">
 
 | Layer | Purpose |
 |--------|---------|
@@ -239,7 +239,7 @@ Hyperparameter optimization was performed using **Optuna**, followed by feature 
 
 # 📈 Results
 
-<img src="assets/results/model_comparison.png">
+<img src="assets/model_comparison_wape.png">
 
 | Model | WAPE |
 |--------|-----:|
@@ -291,55 +291,6 @@ GridSight/
 ├── streamlit_app/           # Interactive dashboard
 ├── requirements.txt
 └── README.md
-```
-
----
-
-# 🚀 Getting Started
-
-## Clone the Repository
-
-```bash
-git clone https://github.com/<your-username>/GridSight.git
-cd GridSight
-```
-
-## Create a Virtual Environment
-
-```bash
-python -m venv .venv
-```
-
-Activate it:
-
-**Windows**
-
-```bash
-.venv\Scripts\activate
-```
-
-**macOS / Linux**
-
-```bash
-source .venv/bin/activate
-```
-
-## Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-## Launch the Dashboard
-
-```bash
-streamlit run streamlit_app/app.py
-```
-
-The dashboard will open at:
-
-```
-http://localhost:8501
 ```
 
 ---
