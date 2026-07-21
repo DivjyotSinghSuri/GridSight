@@ -1,3 +1,4 @@
+from config import DATABASE_PATH, MODEL_DIR
 DATASET_COLUMNS = [
     "timestamp",
 
@@ -61,10 +62,9 @@ DATASET_COLUMNS = [
     "daylight_progress_shortwave_interaction",
 ]
 
+
 MODEL_FEATURES = DATASET_COLUMNS[1:]
 
-DATABASE_PATH = "gridsight.duckdb"
-
-PRODUCTION_MODEL_PATH = "models/production_model.joblib"
+PRODUCTION_MODEL_PATH = MODEL_DIR / "production_model.joblib"
 
 FORECAST_TABLE = "gold_forecasts"

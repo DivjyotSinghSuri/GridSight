@@ -2,13 +2,13 @@ import os
 
 import duckdb
 from dotenv import load_dotenv
+from config import DATABASE_PATH, PROJECT_ROOT
+
 
 def load_bronze():
     load_dotenv()
 
-    DATABASE_PATH = "gridsight.duckdb"
-
-    conn = duckdb.connect(DATABASE_PATH)
+    conn = duckdb.connect(str(DATABASE_PATH))
 
     conn.execute("INSTALL httpfs;")
     conn.execute("LOAD httpfs;")
@@ -28,21 +28,14 @@ CREATE OR REPLACE SECRET gridsight_s3 (
 """)
 
     queries = [
-
-        "database/queries/daily/bronze_weather.sql",
-
-        "database/queries/daily/bronze_irradiance.sql",
-
-        "database/queries/daily/bronze_generation.sql",
-
-        "database/queries/daily/bronze_daylight.sql",
-
+        PROJECT_ROOT / "database" / "queries" / "daily" / "bronze_weather.sql",
+        PROJECT_ROOT / "database" / "queries" / "daily" / "bronze_irradiance.sql",
+        PROJECT_ROOT / "database" / "queries" / "daily" / "bronze_generation.sql",
+        PROJECT_ROOT / "database" / "queries" / "daily" / "bronze_daylight.sql",
     ]
 
     for query in queries:
-
         with open(query, "r") as f:
-
             conn.execute(f.read())
 
     tables = [

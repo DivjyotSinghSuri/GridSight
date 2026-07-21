@@ -1,4 +1,5 @@
 import os
+from config import DATA_DIR
 from src.utils.logger import logger
 from datetime import datetime
 from src.utils.config import *
@@ -20,18 +21,19 @@ s3 = boto3.client(
     region_name=os.getenv("AWS_DEFAULT_REGION")
 )
 
-def build_request(lat,lon):
-  url = OPEN_METEO_SOLAR_URL
-  
-  params = {
-    "latitude": lat,
-    "longitude": lon,
-    "start_date": START_DATE,
-    "end_date": END_DATE,
-    "hourly": ",".join(SOLAR_VARIABLES),
-    "timezone": TIMEZONE
-}
-  return url, params
+
+def build_request(lat, lon):
+    url = OPEN_METEO_SOLAR_URL
+
+    params = {
+        "latitude": lat,
+        "longitude": lon,
+        "start_date": START_DATE,
+        "end_date": END_DATE,
+        "hourly": ",".join(SOLAR_VARIABLES),
+        "timezone": TIMEZONE
+    }
+    return url, params
 
 
 def fetch_irradiance(url, params):
@@ -69,86 +71,90 @@ def fetch_irradiance(url, params):
 
     raise Exception("Maximum retries exceeded due to repeated rate limiting.")
 
+
 def create_dataframe(data):
-  df = pd.DataFrame(data["hourly"])
-  logger.info(f"Created DataFrame with {len(df)} rows.")
-  return df
+    df = pd.DataFrame(data["hourly"])
+    logger.info(f"Created DataFrame with {len(df)} rows.")
+    return df
+
 
 def save_csv(df, grid_id):
-  start = START_DATE.replace("-", "_")
-  end = END_DATE.replace("-", "_")
-  filename = f"irradiance_historical_{start}_{end}.csv"
-  
-  filepath = f"data/raw/{filename}"
-  
-  df.to_csv(
-    filepath,
-    index=False
-)
-  logger.info(f"Saved irradiance data to {filepath}")
-  
-  return filepath
+    start = START_DATE.replace("-", "_")
+    end = END_DATE.replace("-", "_")
+    filename = f"irradiance_historical_{start}_{end}.csv"
+    raw_dir = DATA_DIR / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    filepath = raw_dir / filename
+
+    df.to_csv(filepath,
+              index=False
+              )
+    logger.info(f"Saved irradiance data to {filepath}")
+
+    return filepath
+
 
 def upload_to_s3(filepath, grid_id):
-  filename = os.path.basename(filepath)
-  s3_key = (
-    f"bronze/irradiance/openmeteo/{COUNTRY}/"
-    f"{grid_id}/{filename}"
-)
-    
-  s3.upload_file(
-      Filename=filepath,
-      Bucket=S3_BUCKET,
-      Key=s3_key)
-    
-  logger.info(f"Uploaded {filename} to s3://{S3_BUCKET}/{s3_key}")
+    filename = os.path.basename(filepath)
+    s3_key = (
+        f"bronze/irradiance/openmeteo/{COUNTRY}/"
+        f"{grid_id}/{filename}"
+    )
 
-  os.remove(filepath)
-  logger.info(f"Deleted local file: {filepath}")
+    s3.upload_file(
+        Filename=filepath,
+        Bucket=S3_BUCKET,
+        Key=s3_key)
 
-  return s3_key
+    logger.info(f"Uploaded {filename} to s3://{S3_BUCKET}/{s3_key}")
+
+    os.remove(filepath)
+    logger.info(f"Deleted local file: {filepath}")
+
+    return s3_key
+
 
 def main():
-  logger.info("Starting Open-Meteo irradiance ingestion...")
+    logger.info("Starting Open-Meteo irradiance ingestion...")
 
-  grid_points = generate_grid()
+    grid_points = generate_grid()
 
-  successful_uploads = 0
+    successful_uploads = 0
 
-  try:
-      for grid_id, lat, lon in grid_points:
+    try:
+        for grid_id, lat, lon in grid_points:
 
-          try:
-              logger.info(f"Processing {grid_id} ({lat}, {lon})")
+            try:
+                logger.info(f"Processing {grid_id} ({lat}, {lon})")
 
-              url, params = build_request(lat, lon)
+                url, params = build_request(lat, lon)
 
-              data = fetch_irradiance(url, params)
-              df = create_dataframe(data)
+                data = fetch_irradiance(url, params)
+                df = create_dataframe(data)
 
-              filepath = save_csv(df, grid_id)
+                filepath = save_csv(df, grid_id)
 
-              s3_key = upload_to_s3(filepath, grid_id)
+                s3_key = upload_to_s3(filepath, grid_id)
 
-              logger.info(f"{grid_id} uploaded successfully.")
-              logger.info(f"S3 Object: {s3_key}")
+                logger.info(f"{grid_id} uploaded successfully.")
+                logger.info(f"S3 Object: {s3_key}")
 
-              successful_uploads += 1
+                successful_uploads += 1
 
-          except Exception as e:
-              logger.exception(f"{grid_id} failed: {e}")
-              continue
+            except Exception as e:
+                logger.exception(f"{grid_id} failed: {e}")
+                continue
 
-      logger.info(
-          f"Weather ingestion completed. Successfully uploaded "
-          f"{successful_uploads}/{len(grid_points)} grid points."
+        logger.info(
+            f"Weather ingestion completed. Successfully uploaded "
+            f"{successful_uploads}/{len(grid_points)} grid points."
         )
 
-  except Exception as e:
-      logger.exception(f"Weather ingestion failed: {e}")
+    except Exception as e:
+        logger.exception(f"Weather ingestion failed: {e}")
 
-  finally:
-      logger.info("Pipeline execution finished.")
+    finally:
+        logger.info("Pipeline execution finished.")
 
 
 if __name__ == "__main__":

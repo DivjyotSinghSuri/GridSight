@@ -1,6 +1,7 @@
 import duckdb
 import os
 from dotenv import load_dotenv
+from config import DATABASE_PATH
 
 load_dotenv()
 
@@ -8,7 +9,7 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION")
 
-conn = duckdb.connect("gridsight.duckdb")
+conn = duckdb.connect(str(DATABASE_PATH))
 
 conn.execute("INSTALL httpfs;")
 conn.execute("LOAD httpfs;")

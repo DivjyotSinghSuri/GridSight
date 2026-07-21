@@ -3,20 +3,34 @@ import sys
 from pathlib import Path
 from datetime import datetime, timedelta
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2] / "Desktop" / "GridSight"
+PROJECT_ROOT = None
+
+if os.environ.get("GRIDSIGHT_PROJECT_ROOT"):
+    PROJECT_ROOT = Path(os.environ["GRIDSIGHT_PROJECT_ROOT"]).expanduser().resolve()
+
+if PROJECT_ROOT is None:
+    candidate_paths = [
+        Path(__file__).resolve().parent,
+        Path.cwd().resolve(),
+    ]
+    for start_path in candidate_paths:
+        for candidate in [start_path] + list(start_path.parents):
+            if (candidate / "config.py").is_file() and (candidate / "src").is_dir():
+                PROJECT_ROOT = candidate
+                break
+        if PROJECT_ROOT is not None:
+            break
+
+if PROJECT_ROOT is None:
+    raise RuntimeError(
+        "Could not locate the GridSight project root. "
+        "Set GRIDSIGHT_PROJECT_ROOT to the repository root."
+    )
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-    
-    print("=" * 80)
-    print("PROJECT_ROOT:", PROJECT_ROOT)
-    print("sys.path:")
-    for p in sys.path:
-      print(p)
-    print("=" * 80)
 
-os.chdir(PROJECT_ROOT)
-
+from config import DATABASE_PATH
 from airflow import DAG
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.standard.operators.bash import BashOperator
@@ -25,8 +39,6 @@ from src.ingestion.run_ingestion import main as run_ingestion
 from database.load_bronze_daily import load_bronze
 from src.forecasting.run_forecast import run_forecast
 
-
-PROJECT_DIR = "/Users/divjyotsinghsuri/Desktop/GridSight"
 
 default_args = {
     "owner": "divjyot",
@@ -41,9 +53,7 @@ default_args = {
 def validate_forecasts():
     import duckdb
 
-    db_path = os.path.join(PROJECT_DIR, "gridsight.duckdb")
-
-    with duckdb.connect(db_path) as con:
+    with duckdb.connect(str(DATABASE_PATH)) as con:
 
         row_count = con.execute("""
             SELECT COUNT(*)
@@ -85,7 +95,7 @@ with DAG(
     dbt_task = BashOperator(
         task_id="dbt_run",
         bash_command=f"""
-        cd {PROJECT_DIR}/gridsight_dbt &&
+        cd {PROJECT_ROOT}/gridsight_dbt &&
         dbt deps &&
         dbt run --select +gold_forecast_features
         """,

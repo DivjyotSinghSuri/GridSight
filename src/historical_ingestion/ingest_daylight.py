@@ -16,6 +16,7 @@ s3 = boto3.client(
     region_name=os.getenv("AWS_DEFAULT_REGION")
 )
 
+
 def build_request():
     url = OPEN_METEO_WEATHER_URL
 
@@ -29,7 +30,8 @@ def build_request():
     }
 
     return url, params
-  
+
+
 def fetch_daylight(url, params):
     logger.info("Fetching historical daylight data...")
 
@@ -48,6 +50,7 @@ def fetch_daylight(url, params):
 
     return data
 
+
 def create_dataframe(data):
     df = pd.DataFrame(data["daily"])
 
@@ -55,18 +58,21 @@ def create_dataframe(data):
 
     return df
 
+
 def save_csv(df):
     start = START_DATE.replace("-", "_")
     end = END_DATE.replace("-", "_")
 
     filename = f"daylight_historical_{start}_{end}.csv"
-    filepath = f"data/raw/{filename}"
+    raw_dir = DATA_DIR / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    filepath = raw_dir / filename
 
     df.to_csv(filepath, index=False)
-
     logger.info(f"Saved daylight data to {filepath}")
 
     return filepath
+
 
 def upload_to_s3(filepath):
     filename = os.path.basename(filepath)
@@ -90,9 +96,11 @@ def upload_to_s3(filepath):
     logger.info(f"Deleted local file: {filepath}")
 
     return s3_key
-  
+
+
 def main():
     logger.info("Starting Open-Meteo daylight ingestion...")
+
 
 url, params = build_request()
 

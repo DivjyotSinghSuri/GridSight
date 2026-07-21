@@ -21,6 +21,7 @@ s3 = boto3.client(
     region_name=os.getenv("AWS_DEFAULT_REGION")
 )
 
+
 def generate_monthly_ranges(start_date, end_date):
 
     start = datetime.strptime(start_date, "%Y-%m-%d")
@@ -42,6 +43,7 @@ def generate_monthly_ranges(start_date, end_date):
         current = next_month
 
     return ranges
+
 
 def build_request(period_start, period_end):
 
@@ -132,9 +134,9 @@ def parse_generation(xml_data):
 
         for point in period.findall("ns:Point", namespace):
 
-            position = int(point.find("ns:position",namespace).text)
+            position = int(point.find("ns:position", namespace).text)
 
-            quantity = float(point.find("ns:quantity",namespace).text)
+            quantity = float(point.find("ns:quantity", namespace).text)
 
             timestamp = start_time + timedelta(minutes=(position - 1) * 15)
 
@@ -163,13 +165,13 @@ def save_csv(df):
     end = END_DATE.replace("-", "_")
 
     filename = f"generation_historical_{start}_{end}.csv"
+    raw_dir = DATA_DIR / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    filepath = raw_dir / filename
 
-    filepath = f"data/raw/{filename}"
-
-    df.to_csv(
-        filepath,
-        index=False
-    )
+    df.to_csv(filepath,
+              index=False
+              )
 
     logger.info(f"Saved generation data to {filepath}")
 
@@ -236,6 +238,7 @@ def main():
     upload_to_s3(filepath)
 
     logger.info("Generation ingestion completed successfully.")
+
 
 if __name__ == "__main__":
     main()

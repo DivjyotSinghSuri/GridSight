@@ -26,7 +26,7 @@ from ..config import (
 
 
 def _connect() -> duckdb.DuckDBPyConnection:
-    return duckdb.connect(DATABASE_PATH, read_only=True)
+    return duckdb.connect(str(DATABASE_PATH), read_only=True)
 
 
 @st.cache_data(ttl=300)
@@ -67,6 +67,7 @@ def load_latest_forecast_window(hours: int = 24) -> pd.DataFrame:
 
     except Exception:
         return pd.DataFrame()
+
 
 @st.cache_data(ttl=300)
 def load_historical_generation(days: int = 30) -> pd.DataFrame:
@@ -131,7 +132,8 @@ def last_pipeline_run_utc() -> str:
     never raise, since it renders in the sidebar on every page.
     """
     try:
-        df = run_query(f"SELECT MAX(forecast_created_at) AS last_run FROM {FORECAST_TABLE}")
+        df = run_query(
+            f"SELECT MAX(forecast_created_at) AS last_run FROM {FORECAST_TABLE}")
         if df.empty or pd.isna(df.iloc[0]["last_run"]):
             return "No runs yet"
         return str(df.iloc[0]["last_run"])

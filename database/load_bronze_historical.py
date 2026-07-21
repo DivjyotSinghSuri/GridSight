@@ -1,10 +1,11 @@
 import duckdb
 import os
 from dotenv import load_dotenv
+from config import DATABASE_PATH, PROJECT_ROOT
 
 load_dotenv()
 
-conn = duckdb.connect("gridsight.duckdb")
+conn = duckdb.connect(str(DATABASE_PATH))
 
 conn.execute("INSTALL httpfs;")
 conn.execute("LOAD httpfs;")
@@ -18,47 +19,47 @@ CREATE OR REPLACE SECRET gridsight_s3 (
 );
 """)
 
-with open("database/queries/historical/bronze_weather.sql") as f:
+with open(PROJECT_ROOT / "database" / "queries" / "historical" / "bronze_weather.sql") as f:
     conn.execute(f.read())
 
-with open("database/queries/historical/bronze_irradiance.sql") as f:
+with open(PROJECT_ROOT / "database" / "queries" / "historical" / "bronze_irradiance.sql") as f:
     conn.execute(f.read())
 
-with open("database/queries/historical/bronze_generation.sql") as f:
+with open(PROJECT_ROOT / "database" / "queries" / "historical" / "bronze_generation.sql") as f:
     conn.execute(f.read())
 
-with open("database/queries/historical/bronze_daylight.sql") as f:
+with open(PROJECT_ROOT / "database" / "queries" / "historical" / "bronze_daylight.sql") as f:
     conn.execute(f.read())
 
 
 print(conn.execute("""
 SELECT COUNT(*) FROM bronze_weather;
 """).fetchone()
-)
+      )
 
 print(conn.execute("""
 DESCRIBE bronze_weather;
 """).fetchdf()
-)
+      )
 
 print(conn.execute("""
 SELECT COUNT(*) FROM bronze_irradiance;
 """).fetchone()
-)
+      )
 
 print(conn.execute("""
 DESCRIBE bronze_irradiance;
 """).fetchdf()
-)
+      )
 print(conn.execute("""
 SELECT COUNT(*) FROM bronze_generation;
 """).fetchone()
-)
+      )
 
 print(conn.execute("""
 DESCRIBE bronze_generation;
 """).fetchdf()
-)
+      )
 
 
 conn.close()

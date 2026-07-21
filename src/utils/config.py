@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 COUNTRY = "germany"
@@ -55,3 +56,8 @@ DAYLIGHT_VARIABLES = ",".join([
     "daylight_duration",
     "sunshine_duration",
 ])
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+
+LOG_DIR = PROJECT_ROOT / "logs"
+LOG_DIR.mkdir(exist_ok=True)

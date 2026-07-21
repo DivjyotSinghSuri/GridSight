@@ -1,4 +1,5 @@
 import os
+from config import DATA_DIR
 from src.utils.logger import logger
 from datetime import datetime
 from src.utils.config import *
@@ -18,18 +19,19 @@ s3 = boto3.client(
     region_name=os.getenv("AWS_DEFAULT_REGION")
 )
 
+
 def build_request(lat, lon):
-  url = OPEN_METEO_WEATHER_URL
-  
-  params = {
-    "latitude": lat,
-    "longitude": lon,
-    "start_date": START_DATE,
-    "end_date": END_DATE,
-    "hourly": ",".join(WEATHER_VARIABLES),
-    "timezone": TIMEZONE
-}
-  return url, params
+    url = OPEN_METEO_WEATHER_URL
+
+    params = {
+        "latitude": lat,
+        "longitude": lon,
+        "start_date": START_DATE,
+        "end_date": END_DATE,
+        "hourly": ",".join(WEATHER_VARIABLES),
+        "timezone": TIMEZONE
+    }
+    return url, params
 
 
 def fetch_weather(url, params):
@@ -67,43 +69,49 @@ def fetch_weather(url, params):
 
     raise Exception("Maximum retries exceeded due to repeated rate limiting.")
 
+
 def create_dataframe(data):
-  df = pd.DataFrame(data["hourly"])
-  logger.info(f"Created DataFrame with {len(df)} rows.")
-  return df
+    df = pd.DataFrame(data["hourly"])
+    logger.info(f"Created DataFrame with {len(df)} rows.")
+    return df
+
 
 def save_csv(df, grid_id):
-  start = START_DATE.replace("-", "_")
-  end = END_DATE.replace("-", "_")
+    start = START_DATE.replace("-", "_")
+    end = END_DATE.replace("-", "_")
 
-  filename = f"weather_historical_{start}_{end}.csv"
-  filepath = f"data/raw/{filename}"
-  
-  df.to_csv(
-    filepath,
-    index=False
-)
-  logger.info(f"Saved weather data to {filepath}")
-  
-  return filepath
+    filename = f"weather_historical_{start}_{end}.csv"
+    raw_dir = DATA_DIR / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    filepath = raw_dir / filename
+
+    df.to_csv(
+        filepath,
+        index=False
+    )
+    logger.info(f"Saved weather data to {filepath}")
+
+    return filepath
+
 
 def upload_to_s3(filepath, grid_id):
-  filename = os.path.basename(filepath)
-  s3_key = (
-    f"bronze/weather/openmeteo/{COUNTRY}/"
-    f"{grid_id}/{filename}"
-)  
-  s3.upload_file(
-      Filename=filepath,
-      Bucket=S3_BUCKET,
-      Key=s3_key)
-    
-  logger.info(f"Uploaded {filename} to s3://{S3_BUCKET}/{s3_key}")
+    filename = os.path.basename(filepath)
+    s3_key = (
+        f"bronze/weather/openmeteo/{COUNTRY}/"
+        f"{grid_id}/{filename}"
+    )
+    s3.upload_file(
+        Filename=filepath,
+        Bucket=S3_BUCKET,
+        Key=s3_key)
 
-  os.remove(filepath)
-  logger.info(f"Deleted local file: {filepath}")
+    logger.info(f"Uploaded {filename} to s3://{S3_BUCKET}/{s3_key}")
 
-  return s3_key
+    os.remove(filepath)
+    logger.info(f"Deleted local file: {filepath}")
+
+    return s3_key
+
 
 def main():
     logger.info("Starting Open-Meteo weather ingestion...")
@@ -121,7 +129,7 @@ def main():
                 url, params = build_request(lat, lon)
 
                 data = fetch_weather(url, params)
-                
+
                 time.sleep(2)
 
                 df = create_dataframe(data)

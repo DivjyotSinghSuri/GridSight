@@ -1,9 +1,11 @@
 import duckdb
 import os
 from dotenv import load_dotenv
+from config import DATABASE_PATH
 
+load_dotenv()
 
-conn = duckdb.connect("gridsight.duckdb")
+conn = duckdb.connect(str(DATABASE_PATH))
 
 conn.execute("INSTALL httpfs;")
 conn.execute("LOAD httpfs;")

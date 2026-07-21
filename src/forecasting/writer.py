@@ -5,7 +5,7 @@ from .config import DATABASE_PATH, FORECAST_TABLE
 
 def write_forecasts(forecast_df):
 
-    with duckdb.connect(DATABASE_PATH) as con:
+    with duckdb.connect(str(DATABASE_PATH)) as con:
 
         con.execute(f"""
         CREATE TABLE IF NOT EXISTS {FORECAST_TABLE} (

@@ -4,6 +4,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 
+from config import DATA_DIR
 from src.utils.config import (
     COUNTRY,
     S3_BUCKET
@@ -25,13 +26,10 @@ def _save_csv(df, filename):
     Saves a DataFrame locally and returns the file path.
     """
 
-    os.makedirs("data/raw", exist_ok=True)
+    raw_dir = DATA_DIR / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
 
-    filepath = os.path.join(
-        "data",
-        "raw",
-        filename
-    )
+    filepath = raw_dir / filename
 
     df.to_csv(
         filepath,
@@ -52,13 +50,13 @@ def _upload_to_s3(filepath, source, folder=None):
 
     if folder:
         s3_key = (
-        f"bronze/"
-        f"{source}/"
-        f"{COUNTRY}/"
-        f"daily/"
-        f"{folder}/"
-        f"{filename}"
-    )
+            f"bronze/"
+            f"{source}/"
+            f"{COUNTRY}/"
+            f"daily/"
+            f"{folder}/"
+            f"{filename}"
+        )
     else:
         s3_key = (
             f"bronze/"
@@ -112,12 +110,13 @@ def write_bronze(
     )
 
     s3_key = _upload_to_s3(
-    filepath,
-    source,
-    folder
-)
+        filepath,
+        source,
+        folder
+    )
 
     return s3_key
+
 
 def cleanup_old_files(source, folder=None, keep_days=14):
     """
