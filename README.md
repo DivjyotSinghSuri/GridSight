@@ -74,7 +74,6 @@ GridSight/
 ├── reports/           Experiment results (experiment_results.csv)
 ├── streamlit_app/     Read-only dashboard
 ├── gridshield/        Fault-injection benchmark (see gridshield/README.md)
-├── figures/           GridShield result figures (PDF) and the script that generates fig5
 ├── docs/              Methodology and design decisions
 ├── assets/            README images, dashboard screenshots, result plots
 ├── config.py          Project paths

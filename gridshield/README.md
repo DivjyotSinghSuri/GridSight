@@ -69,6 +69,7 @@ gridshield/
 ├── statistics/       Mean / std / 95% CI aggregation across repetitions
 ├── plots/            Per-metric comparison charts
 ├── tests/            pytest suite
+├── figures/          Result figures (PDF), architecture diagram, and gen_fig5_confound.py
 ├── outputs/                         Results of the 4 experiments (summaries + plots)
 └── outputs_no_resilience_baseline/  Results of the no-internal-resilience variant
 ```
@@ -102,6 +103,8 @@ Per-scenario results are committed under `outputs/` and `outputs_no_resilience_b
 | Malformed JSON | baseline | 0.967 | 0.778 |
 | any of the 4 | fixed retry / checkpointing | 1.000 | 1.000 |
 | any of the 4 | exponential backoff | 1.000 | 1.000 (0.989 for HTTP 500) |
+
+Result figures (PDF) are in `figures/`. `figures/gen_fig5_confound.py` reads the committed `statistics.csv` files and must be run from the GridSight repository root (`python gridshield/figures/gen_fig5_confound.py`); the script writes its output to `figures/fig5_internal_retry_confound.pdf` relative to that directory, so move it into `gridshield/figures/` afterwards.
 
 Experiment 2 detection rates are in `outputs/experiment_2_validation/`; see Limitations for how to read them.
 
