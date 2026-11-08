@@ -1,0 +1,17 @@
+{
+  "scenario_id": "python__future_timestamps",
+  "experiment_id": "experiment_2_validation",
+  "reliability_strategy": "baseline",
+  "validation_strategy": "python",
+  "fault_type": "none",
+  "fault_probability": 0.0,
+  "repetitions": 15,
+  "master_seed": 42,
+  "grid_points_limit": 2,
+  "run_date": "2026-07-25",
+  "reliability_params": {},
+  "validation_params": {
+    "inject_violation": "future_timestamps"
+  },
+  "simulate_interruption_after_units": null
+}

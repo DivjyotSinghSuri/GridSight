@@ -1,0 +1,11 @@
+metric,mean
+recovery_rate,1.0
+recovery_time_seconds,6.742338625000168
+runtime_seconds,43.20263346393282
+api_calls,8.0
+data_completeness,1.0
+detection_rate,
+false_positive_rate,
+propagation,
+storage_bytes,1541.0
+peak_memory_bytes,209284.8

@@ -1,0 +1,22 @@
+{
+  "scenario_id": "gridshield_full",
+  "experiment_id": "experiment_3_full_methodology",
+  "reliability_strategy": "checkpointing",
+  "validation_strategy": "combined",
+  "fault_type": "http_500",
+  "fault_probability": 0.1,
+  "repetitions": 15,
+  "master_seed": 42,
+  "grid_points_limit": 2,
+  "run_date": "2026-07-25",
+  "reliability_params": {
+    "max_attempts": 5,
+    "base_delay": 1.0,
+    "max_delay": 30.0,
+    "jitter_fraction": 0.1
+  },
+  "validation_params": {
+    "inject_violation": "null_values"
+  },
+  "simulate_interruption_after_units": null
+}

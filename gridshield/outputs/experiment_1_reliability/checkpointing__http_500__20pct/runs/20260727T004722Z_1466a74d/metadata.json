@@ -1,0 +1,38 @@
+{
+  "git_commit_hash": "77c5067755763c101e31f7dba0de8f8da133b621",
+  "timestamp": "2026-07-27T00:47:22.788402+00:00",
+  "scenario": {
+    "scenario_id": "checkpointing__http_500__20pct",
+    "experiment_id": "experiment_1_reliability",
+    "reliability_strategy": "checkpointing",
+    "validation_strategy": "none",
+    "fault_type": "http_500",
+    "fault_probability": 0.2,
+    "repetitions": 15,
+    "master_seed": 42,
+    "grid_points_limit": 2,
+    "run_date": "2026-07-25",
+    "reliability_params": {
+      "max_attempts": 5,
+      "base_delay": 1.0,
+      "max_delay": 30.0,
+      "jitter_fraction": 0.1
+    },
+    "validation_params": {},
+    "simulate_interruption_after_units": null
+  },
+  "master_seed": 42,
+  "python_version": "3.13.0",
+  "package_versions": {
+    "requests": "2.34.2",
+    "pandas": "3.0.3",
+    "duckdb": "1.5.4",
+    "dbt-core": "1.11.11",
+    "dbt-duckdb": "1.10.1",
+    "numpy": "2.4.6",
+    "scipy": "1.18.0",
+    "pyyaml": "6.0.3",
+    "boto3": "1.43.36",
+    "python-dotenv": "1.2.2"
+  }
+}

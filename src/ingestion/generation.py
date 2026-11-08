@@ -18,6 +18,8 @@ from src.utils.config import (
 
 from src.utils.logger import logger
 
+MAX_RETRIES = 5
+
 
 PSR_TYPES = {
     "B01": "Biomass",
@@ -82,7 +84,7 @@ def _build_request(period_start, period_end):
 def _request_generation(url, params):
     logger.info("Fetching generation data from ENTSO-E...")
 
-    max_retries = 5
+    max_retries = MAX_RETRIES
 
     for attempt in range(max_retries):
 

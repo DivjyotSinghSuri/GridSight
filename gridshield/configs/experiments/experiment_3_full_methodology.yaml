@@ -1,0 +1,33 @@
+# Experiment 3: Complete GridShield methodology.
+#
+# Compares GridSight's baseline pipeline (no reliability layer, no
+# validation) against the full GridShield methodology (checkpointed
+# backoff + combined Python/dbt validation), under an identical injected
+# fault environment. All metrics the runner collects every repetition
+# (reliability, validation, and overhead) are gathered for both arms, so
+# this experiment's statistics.csv gives a single side-by-side comparison
+# across every metric GridShield defines.
+
+experiment_id: experiment_3_full_methodology
+defaults:
+  fault_type: http_500
+  fault_probability: 0.10
+  repetitions: 15
+  master_seed: 42
+  grid_points_limit: 2
+  run_date: "2026-07-25"
+  validation_params:
+    inject_violation: null_values
+scenarios:
+  - scenario_id: baseline_pipeline
+    reliability_strategy: baseline
+    validation_strategy: none
+
+  - scenario_id: gridshield_full
+    reliability_strategy: checkpointing
+    reliability_params:
+      max_attempts: 5
+      base_delay: 1.0
+      max_delay: 30.0
+      jitter_fraction: 0.1
+    validation_strategy: combined

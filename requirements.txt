@@ -12,3 +12,5 @@ apache-airflow
 plotly
 optuna
 matplotlib
+pytest
+pyyaml

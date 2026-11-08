@@ -11,6 +11,8 @@ from src.utils.config import (
 )
 from src.utils.logger import logger
 
+MAX_RETRIES = 5
+
 
 def _build_request(lat, lon, start_date, end_date):
     params = {
@@ -31,7 +33,7 @@ def _request_weather(url, params, lat, lon, start_date, end_date):
         f"from {start_date} to {end_date}."
     )
 
-    max_retries = 5
+    max_retries = MAX_RETRIES
 
     for attempt in range(max_retries):
 

@@ -1,0 +1,34 @@
+# Experiment 3 — NO-RESILIENCE BASELINE mirror.
+#
+# Byte-for-byte identical scenario matrix to
+# ``configs/experiments/experiment_3_full_methodology.yaml`` (same two
+# scenarios, same fault_type/probability, repetitions=15, master_seed=42,
+# grid_points_limit=2, run_date, validation_params). The only experimental
+# variable changed is that this run executes inside
+# ``gridshield.fault_injection.internal_resilience_toggle.disable_gridsight_internal_resilience()``,
+# which forces GridSight's own fetcher-level retry budget down to 1 attempt
+# (see handbook Chapter 12.1). GridShield's own reliability/validation
+# layers are unmodified.
+experiment_id: experiment_3_full_methodology_no_resilience_baseline
+defaults:
+  fault_type: http_500
+  fault_probability: 0.10
+  repetitions: 15
+  master_seed: 42
+  grid_points_limit: 2
+  run_date: "2026-07-25"
+  validation_params:
+    inject_violation: null_values
+scenarios:
+  - scenario_id: baseline_pipeline
+    reliability_strategy: baseline
+    validation_strategy: none
+
+  - scenario_id: gridshield_full
+    reliability_strategy: checkpointing
+    reliability_params:
+      max_attempts: 5
+      base_delay: 1.0
+      max_delay: 30.0
+      jitter_fraction: 0.1
+    validation_strategy: combined

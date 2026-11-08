@@ -1,0 +1,28 @@
+# GridShield's own standalone dbt project used for dbt-based validation.
+#
+# This is intentionally NOT part of GridSight's real gridsight_dbt/ project.
+# GridShield's storage-isolation requirement means its bronze/staging data
+# lives in an isolated DuckDB file (gridshield/outputs/gridshield.duckdb),
+# so its dbt tests must run against a separate project pointed at that file
+# rather than being added to gridsight_dbt/tests/ (which would both modify
+# GridSight and mix isolated benchmark data into the production dbt project).
+
+name: 'gridshield_validation'
+version: '1.0.0'
+
+profile: 'gridshield'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  gridshield_validation:
+    staging:
+      +materialized: view

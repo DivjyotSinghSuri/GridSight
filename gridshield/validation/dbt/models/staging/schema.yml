@@ -1,0 +1,107 @@
+version: 2
+
+models:
+  - name: stg_weather
+    description: "GridShield's isolated, Germany-wide hourly-average staging view over bronze_weather."
+    columns:
+      - name: timestamp
+        tests:
+          - not_null                # NULL values
+          - no_duplicate_timestamps  # duplicate timestamps
+          - no_future_timestamps     # future timestamps
+          - freshness:
+              max_age_hours: 720     # freshness violations
+      - name: temperature_c
+        tests:
+          - not_null                 # NULL values
+          - accepted_range:          # invalid numeric ranges
+              min_value: -50
+              max_value: 60
+          - column_type:             # wrong datatype
+              expected_type: DOUBLE
+      - name: relative_humidity_pct
+        tests:
+          - accepted_range:
+              min_value: 0
+              max_value: 100
+      - name: cloud_cover_pct
+        tests:
+          - accepted_range:
+              min_value: 0
+              max_value: 100
+    tests:
+      - min_row_count:               # missing rows
+          min_rows: 1
+      - expected_columns:            # schema mismatch
+          column_list:
+            - timestamp
+            - temperature_c
+            - relative_humidity_pct
+            - precipitation_mm
+            - cloud_cover_pct
+            - wind_speed_kmh
+
+  - name: stg_irradiance
+    description: "GridShield's isolated, Germany-wide hourly-average staging view over bronze_irradiance."
+    columns:
+      - name: timestamp
+        tests:
+          - not_null
+          - no_duplicate_timestamps
+          - no_future_timestamps
+      - name: shortwave_radiation
+        tests:
+          - not_null
+          - accepted_range:
+              min_value: 0
+              max_value: 1500
+    tests:
+      - min_row_count:
+          min_rows: 1
+      - expected_columns:
+          column_list:
+            - timestamp
+            - shortwave_radiation
+            - direct_radiation
+            - diffuse_radiation
+            - direct_normal_irradiance
+
+  - name: stg_daylight
+    description: "GridShield's isolated staging view over bronze_daylight."
+    columns:
+      - name: date
+        tests:
+          - not_null
+          - no_duplicate_timestamps
+    tests:
+      - min_row_count:
+          min_rows: 1
+      - expected_columns:
+          column_list:
+            - date
+            - sunrise
+            - sunset
+            - daylight_duration_hours
+            - sunshine_duration_hours
+
+  - name: stg_generation
+    description: "GridShield's isolated, hourly solar-only staging view over bronze_generation."
+    columns:
+      - name: timestamp
+        tests:
+          - not_null
+          - no_duplicate_timestamps
+          - no_future_timestamps
+      - name: solar_generation_mw
+        tests:
+          - not_null
+          - accepted_range:
+              min_value: 0
+              max_value: 100000
+    tests:
+      - min_row_count:
+          min_rows: 1
+      - expected_columns:
+          column_list:
+            - timestamp
+            - solar_generation_mw

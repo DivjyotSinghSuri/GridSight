@@ -1,0 +1,11 @@
+metric,n,mean,std,ci_95_lower,ci_95_upper
+recovery_rate,15,1.0,0.0,1.0,1.0
+recovery_time_seconds,15,0.0,0.0,0.0,0.0
+runtime_seconds,15,131.13331419986983,116.68363104625806,66.51607312368677,195.7505552760529
+api_calls,15,8.6,2.02837021134844,7.476726017495204,9.723273982504796
+data_completeness,15,1.0,0.0,1.0,1.0
+detection_rate,0,,0.0,,
+false_positive_rate,0,,0.0,,
+propagation,0,,0.0,,
+storage_bytes,15,1541.0,0.0,1541.0,1541.0
+peak_memory_bytes,15,208184.4,1089.0761353419828,207581.2897388888,208787.5102611112

@@ -1,0 +1,167 @@
+# Experiment 2: Validation benchmark.
+#
+# Compares GridShield's four validation strategies (No validation, Python
+# validation, dbt validation, Combined) against each of the 8 required
+# data-quality violation types (plus a "none" control with nothing
+# injected). Metrics collected by the runner for every repetition:
+# Detection Rate, False Positives, Propagation (see
+# gridshield/metrics/validation_metrics.py).
+#
+# reliability_strategy is held constant at "baseline" with fault
+# injection off (fault_probability: 0.0) so the only variable under test
+# is the validation layer, not ingestion resilience (that is Experiment 1's
+# concern) — isolating what this experiment is meant to measure.
+experiment_id: experiment_2_validation
+defaults:
+  reliability_strategy: baseline
+  fault_type: none
+  fault_probability: 0.0
+  repetitions: 15
+  master_seed: 42
+  grid_points_limit: 2
+  run_date: '2026-07-25'
+scenarios:
+- scenario_id: none__none
+  validation_strategy: none
+  validation_params:
+    inject_violation: none
+- scenario_id: none__null_values
+  validation_strategy: none
+  validation_params:
+    inject_violation: null_values
+- scenario_id: none__duplicate_timestamps
+  validation_strategy: none
+  validation_params:
+    inject_violation: duplicate_timestamps
+- scenario_id: none__missing_rows
+  validation_strategy: none
+  validation_params:
+    inject_violation: missing_rows
+- scenario_id: none__schema_mismatch
+  validation_strategy: none
+  validation_params:
+    inject_violation: schema_mismatch
+- scenario_id: none__invalid_numeric_range
+  validation_strategy: none
+  validation_params:
+    inject_violation: invalid_numeric_range
+- scenario_id: none__wrong_datatype
+  validation_strategy: none
+  validation_params:
+    inject_violation: wrong_datatype
+- scenario_id: none__future_timestamps
+  validation_strategy: none
+  validation_params:
+    inject_violation: future_timestamps
+- scenario_id: none__freshness_violation
+  validation_strategy: none
+  validation_params:
+    inject_violation: freshness_violation
+- scenario_id: python__none
+  validation_strategy: python
+  validation_params:
+    inject_violation: none
+- scenario_id: python__null_values
+  validation_strategy: python
+  validation_params:
+    inject_violation: null_values
+- scenario_id: python__duplicate_timestamps
+  validation_strategy: python
+  validation_params:
+    inject_violation: duplicate_timestamps
+- scenario_id: python__missing_rows
+  validation_strategy: python
+  validation_params:
+    inject_violation: missing_rows
+- scenario_id: python__schema_mismatch
+  validation_strategy: python
+  validation_params:
+    inject_violation: schema_mismatch
+- scenario_id: python__invalid_numeric_range
+  validation_strategy: python
+  validation_params:
+    inject_violation: invalid_numeric_range
+- scenario_id: python__wrong_datatype
+  validation_strategy: python
+  validation_params:
+    inject_violation: wrong_datatype
+- scenario_id: python__future_timestamps
+  validation_strategy: python
+  validation_params:
+    inject_violation: future_timestamps
+- scenario_id: python__freshness_violation
+  validation_strategy: python
+  validation_params:
+    inject_violation: freshness_violation
+- scenario_id: dbt__none
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: none
+- scenario_id: dbt__null_values
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: null_values
+- scenario_id: dbt__duplicate_timestamps
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: duplicate_timestamps
+- scenario_id: dbt__missing_rows
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: missing_rows
+- scenario_id: dbt__schema_mismatch
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: schema_mismatch
+- scenario_id: dbt__invalid_numeric_range
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: invalid_numeric_range
+- scenario_id: dbt__wrong_datatype
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: wrong_datatype
+- scenario_id: dbt__future_timestamps
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: future_timestamps
+- scenario_id: dbt__freshness_violation
+  validation_strategy: dbt
+  validation_params:
+    inject_violation: freshness_violation
+- scenario_id: combined__none
+  validation_strategy: combined
+  validation_params:
+    inject_violation: none
+- scenario_id: combined__null_values
+  validation_strategy: combined
+  validation_params:
+    inject_violation: null_values
+- scenario_id: combined__duplicate_timestamps
+  validation_strategy: combined
+  validation_params:
+    inject_violation: duplicate_timestamps
+- scenario_id: combined__missing_rows
+  validation_strategy: combined
+  validation_params:
+    inject_violation: missing_rows
+- scenario_id: combined__schema_mismatch
+  validation_strategy: combined
+  validation_params:
+    inject_violation: schema_mismatch
+- scenario_id: combined__invalid_numeric_range
+  validation_strategy: combined
+  validation_params:
+    inject_violation: invalid_numeric_range
+- scenario_id: combined__wrong_datatype
+  validation_strategy: combined
+  validation_params:
+    inject_violation: wrong_datatype
+- scenario_id: combined__future_timestamps
+  validation_strategy: combined
+  validation_params:
+    inject_violation: future_timestamps
+- scenario_id: combined__freshness_violation
+  validation_strategy: combined
+  validation_params:
+    inject_violation: freshness_violation

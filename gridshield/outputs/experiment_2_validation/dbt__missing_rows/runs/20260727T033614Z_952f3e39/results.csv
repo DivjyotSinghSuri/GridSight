@@ -1,0 +1,1454 @@
+scenario_id,run_id,run_number,seed,fault_type,fault_probability,timestamp,recovery_rate,recovery_time_seconds,runtime_seconds,api_calls,data_completeness,detection_rate,false_positive_rate,propagation,validation_status,validation_error,storage_bytes,peak_memory_bytes
+dbt__missing_rows,20260727T033614Z_952f3e39,0,1872694038,none,0.0,2026-07-27T03:36:33.235201+00:00,1.0,0.0,19.191536749945953,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:36:29  Running with dbt=1.11.11
+[0m03:36:30  Registered adapter: duckdb=1.10.1
+[0m03:36:30  Unable to do partial parsing because profile has changed
+[0m03:36:30  [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `freshness` defined on 'stg_weather' in
+package 'gridshield_validation' (models/staging/schema.yml). Arguments to
+generic tests should be nested under the `arguments` property.
+[0m03:36:31  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:36:31  
+[0m03:36:31  Concurrency: 1 threads (target='dev')
+[0m03:36:31  
+[0m03:36:31  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:36:31  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.03s]
+[0m03:36:31  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:36:31  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:36:31  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:36:31  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:36:31  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:36:31  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:36:31  
+[0m03:36:31  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m03:36:31  
+[0m03:36:31  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:36:31  
+[0m03:36:31  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:36:31    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:36:31  
+[0m03:36:31    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:36:31  
+[0m03:36:31  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:36:31    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:36:31  
+[0m03:36:31    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:36:31  
+[0m03:36:31  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:36:31    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:36:31  
+[0m03:36:31    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:36:31  
+[0m03:36:31  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:36:31    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:36:31  
+[0m03:36:31    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:36:31  
+[0m03:36:31  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+[0m03:36:31  [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 15 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+
+",274900,210311
+dbt__missing_rows,20260727T033614Z_952f3e39,1,2627980355,none,0.0,2026-07-27T03:36:51.245625+00:00,1.0,0.0,18.006403834093362,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:36:49  Running with dbt=1.11.11
+[0m03:36:49  Registered adapter: duckdb=1.10.1
+[0m03:36:49  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:36:49  
+[0m03:36:49  Concurrency: 1 threads (target='dev')
+[0m03:36:49  
+[0m03:36:49  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:36:49  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.03s]
+[0m03:36:49  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:36:49  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:36:49  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:36:49  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:36:49  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:36:49  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:36:49  
+[0m03:36:49  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:36:49  
+[0m03:36:49  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:36:49  
+[0m03:36:49  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:36:49    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:36:49  
+[0m03:36:49    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:36:49  
+[0m03:36:49  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:36:49    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:36:49  
+[0m03:36:49    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:36:49  
+[0m03:36:49  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:36:49    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:36:49  
+[0m03:36:49    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:36:49  
+[0m03:36:49  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:36:49    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:36:49  
+[0m03:36:49    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:36:49  
+[0m03:36:49  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207293
+dbt__missing_rows,20260727T033614Z_952f3e39,2,623111610,none,0.0,2026-07-27T03:37:09.164129+00:00,1.0,0.0,17.91556612495333,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:37:07  Running with dbt=1.11.11
+[0m03:37:07  Registered adapter: duckdb=1.10.1
+[0m03:37:07  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:37:07  
+[0m03:37:07  Concurrency: 1 threads (target='dev')
+[0m03:37:07  
+[0m03:37:07  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:37:07  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.03s]
+[0m03:37:07  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:37:07  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:37:07  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:37:07  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:37:07  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:37:07  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:37:07  
+[0m03:37:07  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m03:37:07  
+[0m03:37:07  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:37:07  
+[0m03:37:07  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:37:07    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:37:07  
+[0m03:37:07    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:37:07  
+[0m03:37:07  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:37:07    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:37:07  
+[0m03:37:07    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:37:07  
+[0m03:37:07  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:37:07    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:37:07  
+[0m03:37:07    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:37:07  
+[0m03:37:07  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:37:07    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:37:07  
+[0m03:37:07    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:37:07  
+[0m03:37:07  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207707
+dbt__missing_rows,20260727T033614Z_952f3e39,3,503427098,none,0.0,2026-07-27T03:37:27.184794+00:00,1.0,0.0,18.01783112506382,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:37:25  Running with dbt=1.11.11
+[0m03:37:25  Registered adapter: duckdb=1.10.1
+[0m03:37:25  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:37:25  
+[0m03:37:25  Concurrency: 1 threads (target='dev')
+[0m03:37:25  
+[0m03:37:25  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:37:25  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.02s]
+[0m03:37:25  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:37:25  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:37:25  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:37:25  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:37:25  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:37:25  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:37:25  
+[0m03:37:25  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:37:25  
+[0m03:37:25  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:37:25  
+[0m03:37:25  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:37:25    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:37:25  
+[0m03:37:25    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:37:25  
+[0m03:37:25  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:37:25    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:37:25  
+[0m03:37:25    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:37:25  
+[0m03:37:25  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:37:25    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:37:25  
+[0m03:37:25    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:37:25  
+[0m03:37:25  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:37:25    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:37:25  
+[0m03:37:25    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:37:25  
+[0m03:37:25  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207343
+dbt__missing_rows,20260727T033614Z_952f3e39,4,2187911945,none,0.0,2026-07-27T03:37:45.111675+00:00,1.0,0.0,17.924144541844726,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:37:43  Running with dbt=1.11.11
+[0m03:37:43  Registered adapter: duckdb=1.10.1
+[0m03:37:43  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:37:43  
+[0m03:37:43  Concurrency: 1 threads (target='dev')
+[0m03:37:43  
+[0m03:37:43  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:37:43  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.02s]
+[0m03:37:43  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:37:43  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:37:43  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:37:43  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:37:43  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:37:43  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:37:43  
+[0m03:37:43  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:37:43  
+[0m03:37:43  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:37:43  
+[0m03:37:43  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:37:43    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:37:43  
+[0m03:37:43    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:37:43  
+[0m03:37:43  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:37:43    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:37:43  
+[0m03:37:43    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:37:43  
+[0m03:37:43  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:37:43    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:37:43  
+[0m03:37:43    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:37:43  
+[0m03:37:43  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:37:43    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:37:43  
+[0m03:37:43    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:37:43  
+[0m03:37:43  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207220
+dbt__missing_rows,20260727T033614Z_952f3e39,5,3497509564,none,0.0,2026-07-27T03:38:03.128753+00:00,1.0,0.0,18.0144656249322,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:38:01  Running with dbt=1.11.11
+[0m03:38:01  Registered adapter: duckdb=1.10.1
+[0m03:38:01  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:38:01  
+[0m03:38:01  Concurrency: 1 threads (target='dev')
+[0m03:38:01  
+[0m03:38:01  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:38:01  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.02s]
+[0m03:38:01  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:38:01  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:38:01  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:38:01  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:38:01  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:38:01  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:38:01  
+[0m03:38:01  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:38:01  
+[0m03:38:01  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:38:01  
+[0m03:38:01  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:38:01    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:38:01  
+[0m03:38:01    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:38:01  
+[0m03:38:01  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:38:01    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:38:01  
+[0m03:38:01    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:38:01  
+[0m03:38:01  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:38:01    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:38:01  
+[0m03:38:01    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:38:01  
+[0m03:38:01  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:38:01    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:38:01  
+[0m03:38:01    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:38:01  
+[0m03:38:01  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207588
+dbt__missing_rows,20260727T033614Z_952f3e39,6,807967013,none,0.0,2026-07-27T03:38:21.248507+00:00,1.0,0.0,18.117133000167087,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:38:19  Running with dbt=1.11.11
+[0m03:38:19  Registered adapter: duckdb=1.10.1
+[0m03:38:19  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:38:19  
+[0m03:38:19  Concurrency: 1 threads (target='dev')
+[0m03:38:19  
+[0m03:38:19  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:38:19  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.02s]
+[0m03:38:19  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:38:19  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:38:19  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:38:19  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:38:19  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:38:19  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:38:19  
+[0m03:38:19  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:38:19  
+[0m03:38:19  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:38:19  
+[0m03:38:19  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:38:19    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:38:19  
+[0m03:38:19    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:38:19  
+[0m03:38:19  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:38:19    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:38:19  
+[0m03:38:19    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:38:19  
+[0m03:38:19  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:38:19    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:38:19  
+[0m03:38:19    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:38:19  
+[0m03:38:19  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:38:19    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:38:19  
+[0m03:38:19    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:38:19  
+[0m03:38:19  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207161
+dbt__missing_rows,20260727T033614Z_952f3e39,7,2310120965,none,0.0,2026-07-27T03:38:39.276636+00:00,1.0,0.0,18.02552100014873,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:38:37  Running with dbt=1.11.11
+[0m03:38:37  Registered adapter: duckdb=1.10.1
+[0m03:38:37  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:38:37  
+[0m03:38:37  Concurrency: 1 threads (target='dev')
+[0m03:38:37  
+[0m03:38:37  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:38:37  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.03s]
+[0m03:38:37  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:38:37  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:38:37  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:38:37  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:38:37  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:38:37  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:38:37  
+[0m03:38:37  Finished running 4 view models in 0 hours 0 minutes and 0.12 seconds (0.12s).
+[0m03:38:37  
+[0m03:38:37  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:38:37  
+[0m03:38:37  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:38:37    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:38:37  
+[0m03:38:37    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:38:37  
+[0m03:38:37  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:38:37    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:38:37  
+[0m03:38:37    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:38:37  
+[0m03:38:37  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:38:37    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:38:37  
+[0m03:38:37    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:38:37  
+[0m03:38:37  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:38:37    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:38:37  
+[0m03:38:37    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:38:37  
+[0m03:38:37  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207325
+dbt__missing_rows,20260727T033614Z_952f3e39,8,93698951,none,0.0,2026-07-27T03:38:57.296339+00:00,1.0,0.0,18.016883000032976,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:38:55  Running with dbt=1.11.11
+[0m03:38:55  Registered adapter: duckdb=1.10.1
+[0m03:38:55  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:38:55  
+[0m03:38:55  Concurrency: 1 threads (target='dev')
+[0m03:38:55  
+[0m03:38:55  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:38:55  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.02s]
+[0m03:38:55  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:38:55  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:38:55  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:38:55  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:38:55  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:38:55  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:38:55  
+[0m03:38:55  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:38:55  
+[0m03:38:55  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:38:55  
+[0m03:38:55  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:38:55    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:38:55  
+[0m03:38:55    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:38:55  
+[0m03:38:55  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:38:55    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:38:55  
+[0m03:38:55    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:38:55  
+[0m03:38:55  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:38:55    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:38:55  
+[0m03:38:55    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:38:55  
+[0m03:38:55  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:38:55    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:38:55  
+[0m03:38:55    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:38:55  
+[0m03:38:55  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,206875
+dbt__missing_rows,20260727T033614Z_952f3e39,9,3782664663,none,0.0,2026-07-27T03:39:15.317292+00:00,1.0,0.0,18.01827829098329,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:39:13  Running with dbt=1.11.11
+[0m03:39:13  Registered adapter: duckdb=1.10.1
+[0m03:39:13  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:39:13  
+[0m03:39:13  Concurrency: 1 threads (target='dev')
+[0m03:39:13  
+[0m03:39:13  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:39:13  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.02s]
+[0m03:39:13  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:39:13  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:39:13  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:39:13  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:39:13  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:39:13  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:39:13  
+[0m03:39:13  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:39:13  
+[0m03:39:13  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:39:13  
+[0m03:39:13  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:39:13    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:39:13  
+[0m03:39:13    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:39:13  
+[0m03:39:13  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:39:13    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:39:13  
+[0m03:39:13    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:39:13  
+[0m03:39:13  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:39:13    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:39:13  
+[0m03:39:13    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:39:13  
+[0m03:39:13  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:39:13    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:39:13  
+[0m03:39:13    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:39:13  
+[0m03:39:13  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207176
+dbt__missing_rows,20260727T033614Z_952f3e39,10,997808731,none,0.0,2026-07-27T03:39:33.448115+00:00,1.0,0.0,18.12814616691321,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:39:31  Running with dbt=1.11.11
+[0m03:39:31  Registered adapter: duckdb=1.10.1
+[0m03:39:31  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:39:31  
+[0m03:39:31  Concurrency: 1 threads (target='dev')
+[0m03:39:31  
+[0m03:39:31  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:39:31  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.03s]
+[0m03:39:31  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:39:31  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:39:31  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:39:31  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:39:31  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:39:31  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:39:31  
+[0m03:39:31  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m03:39:31  
+[0m03:39:31  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:39:31  
+[0m03:39:31  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:39:31    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:39:31  
+[0m03:39:31    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:39:31  
+[0m03:39:31  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:39:31    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:39:31  
+[0m03:39:31    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:39:31  
+[0m03:39:31  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:39:31    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:39:31  
+[0m03:39:31    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:39:31  
+[0m03:39:31  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:39:31    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:39:31  
+[0m03:39:31    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:39:31  
+[0m03:39:31  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,206807
+dbt__missing_rows,20260727T033614Z_952f3e39,11,254291878,none,0.0,2026-07-27T03:39:52.347553+00:00,1.0,0.0,18.89663550001569,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:39:49  Running with dbt=1.11.11
+[0m03:39:49  Registered adapter: duckdb=1.10.1
+[0m03:39:49  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:39:49  
+[0m03:39:49  Concurrency: 1 threads (target='dev')
+[0m03:39:49  
+[0m03:39:49  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:39:49  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.02s]
+[0m03:39:49  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:39:49  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:39:49  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:39:49  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:39:49  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:39:49  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:39:49  
+[0m03:39:49  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:39:49  
+[0m03:39:49  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:39:49  
+[0m03:39:49  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:39:49    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:39:49  
+[0m03:39:49    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:39:49  
+[0m03:39:49  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:39:49    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:39:49  
+[0m03:39:49    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:39:49  
+[0m03:39:49  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:39:49    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:39:49  
+[0m03:39:49    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:39:49  
+[0m03:39:49  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:39:49    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:39:49  
+[0m03:39:49    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:39:49  
+[0m03:39:49  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207337
+dbt__missing_rows,20260727T033614Z_952f3e39,12,275391175,none,0.0,2026-07-27T03:40:10.516064+00:00,1.0,0.0,18.165741625009105,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:40:08  Running with dbt=1.11.11
+[0m03:40:08  Registered adapter: duckdb=1.10.1
+[0m03:40:08  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:40:08  
+[0m03:40:08  Concurrency: 1 threads (target='dev')
+[0m03:40:08  
+[0m03:40:08  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:40:08  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.03s]
+[0m03:40:08  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:40:08  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:40:08  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:40:08  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:40:08  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:40:08  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:40:08  
+[0m03:40:08  Finished running 4 view models in 0 hours 0 minutes and 0.12 seconds (0.12s).
+[0m03:40:08  
+[0m03:40:08  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:40:08  
+[0m03:40:08  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:40:08    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:40:08  
+[0m03:40:08    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:40:08  
+[0m03:40:08  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:40:08    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:40:08  
+[0m03:40:08    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:40:08  
+[0m03:40:08  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:40:08    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:40:08  
+[0m03:40:08    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:40:08  
+[0m03:40:08  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:40:08    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:40:08  
+[0m03:40:08    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:40:08  
+[0m03:40:08  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207672
+dbt__missing_rows,20260727T033614Z_952f3e39,13,591308814,none,0.0,2026-07-27T03:40:28.640318+00:00,1.0,0.0,18.12137125013396,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:40:26  Running with dbt=1.11.11
+[0m03:40:26  Registered adapter: duckdb=1.10.1
+[0m03:40:26  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:40:26  
+[0m03:40:26  Concurrency: 1 threads (target='dev')
+[0m03:40:26  
+[0m03:40:26  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:40:26  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.03s]
+[0m03:40:26  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:40:26  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:40:26  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:40:26  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:40:26  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:40:26  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:40:26  
+[0m03:40:26  Finished running 4 view models in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m03:40:26  
+[0m03:40:26  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:40:26  
+[0m03:40:26  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:40:26    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:40:26  
+[0m03:40:26    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:40:26  
+[0m03:40:26  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:40:26    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:40:26  
+[0m03:40:26    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:40:26  
+[0m03:40:26  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:40:26    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:40:26  
+[0m03:40:26    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:40:26  
+[0m03:40:26  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:40:26    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:40:26  
+[0m03:40:26    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:40:26  
+[0m03:40:26  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,207183
+dbt__missing_rows,20260727T033614Z_952f3e39,14,3561153616,none,0.0,2026-07-27T03:40:46.677763+00:00,1.0,0.0,18.03452566615306,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m03:40:44  Running with dbt=1.11.11
+[0m03:40:44  Registered adapter: duckdb=1.10.1
+[0m03:40:44  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m03:40:44  
+[0m03:40:44  Concurrency: 1 threads (target='dev')
+[0m03:40:44  
+[0m03:40:44  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m03:40:45  1 of 4 ERROR creating sql view model main.stg_daylight ......................... [[31mERROR[0m in 0.03s]
+[0m03:40:45  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m03:40:45  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m03:40:45  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m03:40:45  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m03:40:45  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m03:40:45  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m03:40:45  
+[0m03:40:45  Finished running 4 view models in 0 hours 0 minutes and 0.12 seconds (0.12s).
+[0m03:40:45  
+[0m03:40:45  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m03:40:45  
+[0m03:40:45  [31mFailure in model stg_daylight (models/staging/stg_daylight.sql)[0m
+[0m03:40:45    Runtime Error in model stg_daylight (models/staging/stg_daylight.sql)
+  Binder Error: No function matches the given name and argument types '/(VARCHAR, DECIMAL(5,1))'. You might need to add explicit type casts.
+  	Candidate functions:
+  	/(FLOAT, FLOAT) -> FLOAT
+  	/(DOUBLE, DOUBLE) -> DOUBLE
+  	/(INTERVAL, DOUBLE) -> INTERVAL
+  
+  
+  LINE 14:         daylight_duration / 3600.0 AS daylight_duration_hours,
+                                     ^
+[0m03:40:45  
+[0m03:40:45    compiled code at target/compiled/gridshield_validation/models/staging/stg_daylight.sql
+[0m03:40:45  
+[0m03:40:45  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m03:40:45    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	date_trunc(VARCHAR, DATE) -> TIMESTAMP
+  	date_trunc(VARCHAR, INTERVAL) -> INTERVAL
+  	date_trunc(VARCHAR, TIMESTAMP) -> TIMESTAMP
+  	date_trunc(VARCHAR, TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  
+  
+  LINE 25:     GROUP BY DATE_TRUNC('hour', timestamp)
+                        ^
+[0m03:40:45  
+[0m03:40:45    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m03:40:45  
+[0m03:40:45  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m03:40:45    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                   ^
+[0m03:40:45  
+[0m03:40:45    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m03:40:45  
+[0m03:40:45  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m03:40:45    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: No function matches the given name and argument types 'avg(VARCHAR)'. You might need to add explicit type casts.
+  	Candidate functions:
+  	avg(DECIMAL) -> DECIMAL
+  	avg(SMALLINT) -> DOUBLE
+  	avg(INTEGER) -> DOUBLE
+  	avg(BIGINT) -> DOUBLE
+  	avg(HUGEINT) -> DOUBLE
+  	avg(INTERVAL) -> INTERVAL
+  	avg(DOUBLE) -> DOUBLE
+  	avg(TIMESTAMP) -> TIMESTAMP
+  	avg(TIMESTAMP WITH TIME ZONE) -> TIMESTAMP WITH TIME ZONE
+  	avg(TIME) -> TIME
+  	avg(TIME WITH TIME ZONE) -> TIME WITH TIME ZONE
+  
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                   ^
+[0m03:40:45  
+[0m03:40:45    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m03:40:45  
+[0m03:40:45  Done. PASS=0 WARN=0 ERROR=4 SKIP=0 NO-OP=0 TOTAL=4
+
+",274900,206880

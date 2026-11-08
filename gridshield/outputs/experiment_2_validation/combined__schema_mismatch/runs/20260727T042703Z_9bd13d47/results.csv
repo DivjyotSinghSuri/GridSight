@@ -1,0 +1,809 @@
+scenario_id,run_id,run_number,seed,fault_type,fault_probability,timestamp,recovery_rate,recovery_time_seconds,runtime_seconds,api_calls,data_completeness,detection_rate,false_positive_rate,propagation,validation_status,validation_error,storage_bytes,peak_memory_bytes
+combined__schema_mismatch,20260727T042703Z_9bd13d47,0,2915120256,none,0.0,2026-07-27T04:27:22.540315+00:00,1.0,0.0,19.046841458883137,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:27:19  Running with dbt=1.11.11
+[0m04:27:19  Registered adapter: duckdb=1.10.1
+[0m04:27:19  Unable to do partial parsing because profile has changed
+[0m04:27:20  [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `freshness` defined on 'stg_weather' in
+package 'gridshield_validation' (models/staging/schema.yml). Arguments to
+generic tests should be nested under the `arguments` property.
+[0m04:27:20  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:27:20  
+[0m04:27:20  Concurrency: 1 threads (target='dev')
+[0m04:27:20  
+[0m04:27:20  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:27:20  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.03s]
+[0m04:27:20  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:27:20  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:27:20  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:27:20  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:27:20  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:27:20  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:27:20  
+[0m04:27:20  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:27:20  
+[0m04:27:20  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:27:20  
+[0m04:27:20  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:27:20    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:27:20  
+[0m04:27:20    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:27:20  
+[0m04:27:20  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:27:20    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:27:20  
+[0m04:27:20    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:27:20  
+[0m04:27:20  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:27:20    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:27:20  
+[0m04:27:20    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:27:20  
+[0m04:27:20  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+[0m04:27:20  [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 15 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+
+",1062191,235476
+combined__schema_mismatch,20260727T042703Z_9bd13d47,1,2229573727,none,0.0,2026-07-27T04:27:40.647939+00:00,1.0,0.0,18.1049275000114,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:27:38  Running with dbt=1.11.11
+[0m04:27:38  Registered adapter: duckdb=1.10.1
+[0m04:27:38  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:27:38  
+[0m04:27:38  Concurrency: 1 threads (target='dev')
+[0m04:27:38  
+[0m04:27:38  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:27:39  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:27:39  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:27:39  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:27:39  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:27:39  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:27:39  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:27:39  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:27:39  
+[0m04:27:39  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:27:39  
+[0m04:27:39  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:27:39  
+[0m04:27:39  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:27:39    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:27:39  
+[0m04:27:39    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:27:39  
+[0m04:27:39  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:27:39    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:27:39  
+[0m04:27:39    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:27:39  
+[0m04:27:39  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:27:39    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:27:39  
+[0m04:27:39    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:27:39  
+[0m04:27:39  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1848623,231815
+combined__schema_mismatch,20260727T042703Z_9bd13d47,2,1641848009,none,0.0,2026-07-27T04:27:58.849722+00:00,1.0,0.0,18.198218750068918,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:27:56  Running with dbt=1.11.11
+[0m04:27:56  Registered adapter: duckdb=1.10.1
+[0m04:27:56  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:27:56  
+[0m04:27:56  Concurrency: 1 threads (target='dev')
+[0m04:27:56  
+[0m04:27:57  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:27:57  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:27:57  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:27:57  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:27:57  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:27:57  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:27:57  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:27:57  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:27:57  
+[0m04:27:57  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:27:57  
+[0m04:27:57  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:27:57  
+[0m04:27:57  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:27:57    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:27:57  
+[0m04:27:57    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:27:57  
+[0m04:27:57  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:27:57    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:27:57  
+[0m04:27:57    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:27:57  
+[0m04:27:57  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:27:57    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:27:57  
+[0m04:27:57    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:27:57  
+[0m04:27:57  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1062191,232208
+combined__schema_mismatch,20260727T042703Z_9bd13d47,3,2979391469,none,0.0,2026-07-27T04:28:16.879127+00:00,1.0,0.0,18.026664291042835,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:28:14  Running with dbt=1.11.11
+[0m04:28:14  Registered adapter: duckdb=1.10.1
+[0m04:28:15  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:28:15  
+[0m04:28:15  Concurrency: 1 threads (target='dev')
+[0m04:28:15  
+[0m04:28:15  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:28:15  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:28:15  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:28:15  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:28:15  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:28:15  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:28:15  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:28:15  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:28:15  
+[0m04:28:15  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:28:15  
+[0m04:28:15  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:28:15  
+[0m04:28:15  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:28:15    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:28:15  
+[0m04:28:15    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:28:15  
+[0m04:28:15  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:28:15    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:28:15  
+[0m04:28:15    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:28:15  
+[0m04:28:15  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:28:15    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:28:15  
+[0m04:28:15    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:28:15  
+[0m04:28:15  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1848623,232190
+combined__schema_mismatch,20260727T042703Z_9bd13d47,4,2857967168,none,0.0,2026-07-27T04:28:35.128399+00:00,1.0,0.0,18.246616499964148,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:28:32  Running with dbt=1.11.11
+[0m04:28:32  Registered adapter: duckdb=1.10.1
+[0m04:28:33  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:28:33  
+[0m04:28:33  Concurrency: 1 threads (target='dev')
+[0m04:28:33  
+[0m04:28:33  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:28:33  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:28:33  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:28:33  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:28:33  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:28:33  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:28:33  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:28:33  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:28:33  
+[0m04:28:33  Finished running 4 view models in 0 hours 0 minutes and 0.14 seconds (0.14s).
+[0m04:28:33  
+[0m04:28:33  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:28:33  
+[0m04:28:33  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:28:33    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:28:33  
+[0m04:28:33    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:28:33  
+[0m04:28:33  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:28:33    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:28:33  
+[0m04:28:33    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:28:33  
+[0m04:28:33  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:28:33    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:28:33  
+[0m04:28:33    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:28:33  
+[0m04:28:33  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1062191,231667
+combined__schema_mismatch,20260727T042703Z_9bd13d47,5,694122039,none,0.0,2026-07-27T04:28:53.251963+00:00,1.0,0.0,18.120545542100444,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:28:51  Running with dbt=1.11.11
+[0m04:28:51  Registered adapter: duckdb=1.10.1
+[0m04:28:51  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:28:51  
+[0m04:28:51  Concurrency: 1 threads (target='dev')
+[0m04:28:51  
+[0m04:28:51  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:28:51  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:28:51  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:28:51  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:28:51  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:28:51  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:28:51  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:28:51  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:28:51  
+[0m04:28:51  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:28:51  
+[0m04:28:51  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:28:51  
+[0m04:28:51  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:28:51    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:28:51  
+[0m04:28:51    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:28:51  
+[0m04:28:51  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:28:51    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:28:51  
+[0m04:28:51    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:28:51  
+[0m04:28:51  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:28:51    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:28:51  
+[0m04:28:51    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:28:51  
+[0m04:28:51  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1848623,231924
+combined__schema_mismatch,20260727T042703Z_9bd13d47,6,3979747597,none,0.0,2026-07-27T04:29:11.479573+00:00,1.0,0.0,18.225054832873866,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:29:09  Running with dbt=1.11.11
+[0m04:29:09  Registered adapter: duckdb=1.10.1
+[0m04:29:09  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:29:09  
+[0m04:29:09  Concurrency: 1 threads (target='dev')
+[0m04:29:09  
+[0m04:29:09  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:29:09  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:29:09  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:29:09  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:29:09  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:29:09  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:29:09  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:29:09  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:29:09  
+[0m04:29:09  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:29:09  
+[0m04:29:09  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:29:09  
+[0m04:29:09  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:29:09    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:29:09  
+[0m04:29:09    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:29:09  
+[0m04:29:09  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:29:09    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:29:09  
+[0m04:29:09    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:29:09  
+[0m04:29:09  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:29:09    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:29:09  
+[0m04:29:09    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:29:09  
+[0m04:29:09  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1062191,231520
+combined__schema_mismatch,20260727T042703Z_9bd13d47,7,251903541,none,0.0,2026-07-27T04:29:29.568749+00:00,1.0,0.0,18.08638779190369,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:29:27  Running with dbt=1.11.11
+[0m04:29:27  Registered adapter: duckdb=1.10.1
+[0m04:29:27  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:29:27  
+[0m04:29:27  Concurrency: 1 threads (target='dev')
+[0m04:29:27  
+[0m04:29:27  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:29:27  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:29:27  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:29:27  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:29:27  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:29:27  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:29:27  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:29:27  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:29:27  
+[0m04:29:27  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:29:27  
+[0m04:29:27  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:29:27  
+[0m04:29:27  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:29:27    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:29:27  
+[0m04:29:27    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:29:27  
+[0m04:29:27  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:29:27    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:29:27  
+[0m04:29:27    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:29:27  
+[0m04:29:27  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:29:27    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:29:27  
+[0m04:29:27    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:29:27  
+[0m04:29:27  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1848623,231868
+combined__schema_mismatch,20260727T042703Z_9bd13d47,8,3367584228,none,0.0,2026-07-27T04:29:47.533428+00:00,1.0,0.0,17.961840041913092,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:29:45  Running with dbt=1.11.11
+[0m04:29:45  Registered adapter: duckdb=1.10.1
+[0m04:29:45  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:29:45  
+[0m04:29:45  Concurrency: 1 threads (target='dev')
+[0m04:29:45  
+[0m04:29:45  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:29:46  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:29:46  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:29:46  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:29:46  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:29:46  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:29:46  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:29:46  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:29:46  
+[0m04:29:46  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:29:46  
+[0m04:29:46  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:29:46  
+[0m04:29:46  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:29:46    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:29:46  
+[0m04:29:46    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:29:46  
+[0m04:29:46  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:29:46    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:29:46  
+[0m04:29:46    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:29:46  
+[0m04:29:46  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:29:46    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:29:46  
+[0m04:29:46    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:29:46  
+[0m04:29:46  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1062191,231731
+combined__schema_mismatch,20260727T042703Z_9bd13d47,9,1463062289,none,0.0,2026-07-27T04:30:05.651000+00:00,1.0,0.0,18.114758915966377,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:30:03  Running with dbt=1.11.11
+[0m04:30:03  Registered adapter: duckdb=1.10.1
+[0m04:30:03  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:30:03  
+[0m04:30:03  Concurrency: 1 threads (target='dev')
+[0m04:30:03  
+[0m04:30:03  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:30:04  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:30:04  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:30:04  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:30:04  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:30:04  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:30:04  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:30:04  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:30:04  
+[0m04:30:04  Finished running 4 view models in 0 hours 0 minutes and 0.14 seconds (0.14s).
+[0m04:30:04  
+[0m04:30:04  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:30:04  
+[0m04:30:04  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:30:04    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:30:04  
+[0m04:30:04    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:30:04  
+[0m04:30:04  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:30:04    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:30:04  
+[0m04:30:04    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:30:04  
+[0m04:30:04  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:30:04    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:30:04  
+[0m04:30:04    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:30:04  
+[0m04:30:04  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1848623,231388
+combined__schema_mismatch,20260727T042703Z_9bd13d47,10,955210535,none,0.0,2026-07-27T04:30:24.790882+00:00,1.0,0.0,19.136972334003076,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:30:21  Running with dbt=1.11.11
+[0m04:30:21  Registered adapter: duckdb=1.10.1
+[0m04:30:22  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:30:22  
+[0m04:30:22  Concurrency: 1 threads (target='dev')
+[0m04:30:22  
+[0m04:30:22  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:30:22  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:30:22  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:30:22  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:30:22  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:30:22  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:30:22  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:30:22  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:30:22  
+[0m04:30:22  Finished running 4 view models in 0 hours 0 minutes and 0.14 seconds (0.14s).
+[0m04:30:22  
+[0m04:30:22  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:30:22  
+[0m04:30:22  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:30:22    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:30:22  
+[0m04:30:22    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:30:22  
+[0m04:30:22  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:30:22    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:30:22  
+[0m04:30:22    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:30:22  
+[0m04:30:22  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:30:22    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:30:22  
+[0m04:30:22    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:30:22  
+[0m04:30:22  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1062191,231925
+combined__schema_mismatch,20260727T042703Z_9bd13d47,11,2163604265,none,0.0,2026-07-27T04:30:43.062369+00:00,1.0,0.0,18.268681375076994,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:30:40  Running with dbt=1.11.11
+[0m04:30:40  Registered adapter: duckdb=1.10.1
+[0m04:30:41  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:30:41  
+[0m04:30:41  Concurrency: 1 threads (target='dev')
+[0m04:30:41  
+[0m04:30:41  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:30:41  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:30:41  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:30:41  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:30:41  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:30:41  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:30:41  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:30:41  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:30:41  
+[0m04:30:41  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:30:41  
+[0m04:30:41  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:30:41  
+[0m04:30:41  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:30:41    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:30:41  
+[0m04:30:41    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:30:41  
+[0m04:30:41  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:30:41    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:30:41  
+[0m04:30:41    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:30:41  
+[0m04:30:41  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:30:41    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:30:41  
+[0m04:30:41    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:30:41  
+[0m04:30:41  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1848623,231763
+combined__schema_mismatch,20260727T042703Z_9bd13d47,12,4151130388,none,0.0,2026-07-27T04:31:01.234509+00:00,1.0,0.0,18.16926516685635,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:30:59  Running with dbt=1.11.11
+[0m04:30:59  Registered adapter: duckdb=1.10.1
+[0m04:30:59  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:30:59  
+[0m04:30:59  Concurrency: 1 threads (target='dev')
+[0m04:30:59  
+[0m04:30:59  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:30:59  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:30:59  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:30:59  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:30:59  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:30:59  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:30:59  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:30:59  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:30:59  
+[0m04:30:59  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:30:59  
+[0m04:30:59  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:30:59  
+[0m04:30:59  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:30:59    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:30:59  
+[0m04:30:59    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:30:59  
+[0m04:30:59  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:30:59    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:30:59  
+[0m04:30:59    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:30:59  
+[0m04:30:59  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:30:59    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:30:59  
+[0m04:30:59    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:30:59  
+[0m04:30:59  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1062191,231526
+combined__schema_mismatch,20260727T042703Z_9bd13d47,13,3821588495,none,0.0,2026-07-27T04:31:19.279027+00:00,1.0,0.0,18.041630875086412,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:31:17  Running with dbt=1.11.11
+[0m04:31:17  Registered adapter: duckdb=1.10.1
+[0m04:31:17  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:31:17  
+[0m04:31:17  Concurrency: 1 threads (target='dev')
+[0m04:31:17  
+[0m04:31:17  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:31:17  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:31:17  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:31:17  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:31:17  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:31:17  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:31:17  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:31:17  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:31:17  
+[0m04:31:17  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:31:17  
+[0m04:31:17  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:31:17  
+[0m04:31:17  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:31:17    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:31:17  
+[0m04:31:17    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:31:17  
+[0m04:31:17  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:31:17    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:31:17  
+[0m04:31:17    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:31:17  
+[0m04:31:17  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:31:17    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:31:17  
+[0m04:31:17    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:31:17  
+[0m04:31:17  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1848623,231354
+combined__schema_mismatch,20260727T042703Z_9bd13d47,14,581820980,none,0.0,2026-07-27T04:31:37.505339+00:00,1.0,0.0,18.223633208079264,6,1.0,,,,dbt_run_failed,"dbt run failed (exit code 1) in <GRIDSIGHT_ROOT>/gridshield/validation/dbt:
+[0m04:31:35  Running with dbt=1.11.11
+[0m04:31:35  Registered adapter: duckdb=1.10.1
+[0m04:31:35  Found 4 models, 29 data tests, 4 sources, 492 macros
+[0m04:31:35  
+[0m04:31:35  Concurrency: 1 threads (target='dev')
+[0m04:31:35  
+[0m04:31:35  1 of 4 START sql view model main.stg_daylight .................................. [RUN]
+[0m04:31:35  1 of 4 OK created sql view model main.stg_daylight ............................. [[32mOK[0m in 0.04s]
+[0m04:31:35  2 of 4 START sql view model main.stg_generation ................................ [RUN]
+[0m04:31:35  2 of 4 ERROR creating sql view model main.stg_generation ....................... [[31mERROR[0m in 0.01s]
+[0m04:31:35  3 of 4 START sql view model main.stg_irradiance ................................ [RUN]
+[0m04:31:35  3 of 4 ERROR creating sql view model main.stg_irradiance ....................... [[31mERROR[0m in 0.01s]
+[0m04:31:35  4 of 4 START sql view model main.stg_weather ................................... [RUN]
+[0m04:31:35  4 of 4 ERROR creating sql view model main.stg_weather .......................... [[31mERROR[0m in 0.01s]
+[0m04:31:35  
+[0m04:31:35  Finished running 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m04:31:35  
+[0m04:31:35  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m04:31:35  
+[0m04:31:35  [31mFailure in model stg_generation (models/staging/stg_generation.sql)[0m
+[0m04:31:35    Runtime Error in model stg_generation (models/staging/stg_generation.sql)
+  Binder Error: Referenced column ""generation_mw"" not found in FROM clause!
+  Candidate bindings: ""production_type"", ""timestamp""
+  
+  LINE 15:     SELECT timestamp, generation_mw
+                                 ^
+[0m04:31:35  
+[0m04:31:35    compiled code at target/compiled/gridshield_validation/models/staging/stg_generation.sql
+[0m04:31:35  
+[0m04:31:35  [31mFailure in model stg_irradiance (models/staging/stg_irradiance.sql)[0m
+[0m04:31:35    Runtime Error in model stg_irradiance (models/staging/stg_irradiance.sql)
+  Binder Error: Referenced column ""shortwave_radiation"" not found in FROM clause!
+  Candidate bindings: ""direct_radiation"", ""diffuse_radiation"", ""direct_normal_irradiance"", ""time""
+  
+  LINE 13:         AVG(shortwave_radiation) AS shortwave_radiation,
+                       ^
+[0m04:31:35  
+[0m04:31:35    compiled code at target/compiled/gridshield_validation/models/staging/stg_irradiance.sql
+[0m04:31:35  
+[0m04:31:35  [31mFailure in model stg_weather (models/staging/stg_weather.sql)[0m
+[0m04:31:35    Runtime Error in model stg_weather (models/staging/stg_weather.sql)
+  Binder Error: Referenced column ""temperature_2m"" not found in FROM clause!
+  Candidate bindings: ""relative_humidity_2m"", ""time"", ""wind_speed_10m""
+  
+  LINE 13:         AVG(temperature_2m) AS temperature_c,
+                       ^
+[0m04:31:35  
+[0m04:31:35    compiled code at target/compiled/gridshield_validation/models/staging/stg_weather.sql
+[0m04:31:35  
+[0m04:31:35  Done. PASS=1 WARN=0 ERROR=3 SKIP=0 NO-OP=0 TOTAL=4
+
+",1062191,231830

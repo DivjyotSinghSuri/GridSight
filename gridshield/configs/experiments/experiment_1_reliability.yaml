@@ -1,0 +1,318 @@
+# Experiment 1: Reliability benchmark.
+#
+# Compares GridShield's four reliability strategies (Baseline, Retry,
+# Backoff, Checkpointing) under each of the 4 injected fault types at
+# each of the required fault probabilities (0%, 10%, 20%, 25%), plus a
+# no-fault control per strategy. Metrics collected by the runner for
+# every repetition: Recovery Rate, Recovery Time, Runtime, API Calls,
+# Data Completeness (see gridshield/metrics/reliability_metrics.py).
+#
+# grid_points_limit: 2 is a deliberate practicality default (keeps a
+# 15-repetition x 52-scenario run tractable given GridSight's own
+# built-in per-call courtesy sleep) — it does not change fault-injection
+# or reliability-strategy semantics, only how many of the 25 grid points
+# are sampled per repetition. Override per-scenario or edit this file's
+# `defaults` to use the full grid for a formal run.
+#
+# max_attempts is held at 5 for fixed_retry, exponential_backoff, AND
+# checkpointing (audit fix: previously fixed_retry used max_attempts: 3
+# while the other two used 5, confounding the strategy comparison with
+# an unequal retry budget). Only the retry *timing* (fixed delay vs.
+# exponential backoff) and checkpointing behavior now differ between
+# scenarios — the number of attempts available does not.
+experiment_id: experiment_1_reliability
+defaults:
+  validation_strategy: none
+  repetitions: 15
+  master_seed: 42
+  grid_points_limit: 2
+  run_date: '2026-07-25'
+scenarios:
+- scenario_id: baseline__no_fault
+  reliability_strategy: baseline
+  fault_type: none
+  fault_probability: 0.0
+- scenario_id: baseline__http_429__10pct
+  reliability_strategy: baseline
+  fault_type: http_429
+  fault_probability: 0.1
+- scenario_id: baseline__http_429__20pct
+  reliability_strategy: baseline
+  fault_type: http_429
+  fault_probability: 0.2
+- scenario_id: baseline__http_429__25pct
+  reliability_strategy: baseline
+  fault_type: http_429
+  fault_probability: 0.25
+- scenario_id: baseline__http_500__10pct
+  reliability_strategy: baseline
+  fault_type: http_500
+  fault_probability: 0.1
+- scenario_id: baseline__http_500__20pct
+  reliability_strategy: baseline
+  fault_type: http_500
+  fault_probability: 0.2
+- scenario_id: baseline__http_500__25pct
+  reliability_strategy: baseline
+  fault_type: http_500
+  fault_probability: 0.25
+- scenario_id: baseline__timeout__10pct
+  reliability_strategy: baseline
+  fault_type: timeout
+  fault_probability: 0.1
+- scenario_id: baseline__timeout__20pct
+  reliability_strategy: baseline
+  fault_type: timeout
+  fault_probability: 0.2
+- scenario_id: baseline__timeout__25pct
+  reliability_strategy: baseline
+  fault_type: timeout
+  fault_probability: 0.25
+- scenario_id: baseline__malformed_json__10pct
+  reliability_strategy: baseline
+  fault_type: malformed_json
+  fault_probability: 0.1
+- scenario_id: baseline__malformed_json__20pct
+  reliability_strategy: baseline
+  fault_type: malformed_json
+  fault_probability: 0.2
+- scenario_id: baseline__malformed_json__25pct
+  reliability_strategy: baseline
+  fault_type: malformed_json
+  fault_probability: 0.25
+- scenario_id: fixed_retry__no_fault
+  reliability_strategy: fixed_retry
+  fault_type: none
+  fault_probability: 0.0
+  reliability_params: &id001
+    max_attempts: 5
+    delay_seconds: 2.0
+- scenario_id: fixed_retry__http_429__10pct
+  reliability_strategy: fixed_retry
+  fault_type: http_429
+  fault_probability: 0.1
+  reliability_params: *id001
+- scenario_id: fixed_retry__http_429__20pct
+  reliability_strategy: fixed_retry
+  fault_type: http_429
+  fault_probability: 0.2
+  reliability_params: *id001
+- scenario_id: fixed_retry__http_429__25pct
+  reliability_strategy: fixed_retry
+  fault_type: http_429
+  fault_probability: 0.25
+  reliability_params: *id001
+- scenario_id: fixed_retry__http_500__10pct
+  reliability_strategy: fixed_retry
+  fault_type: http_500
+  fault_probability: 0.1
+  reliability_params: *id001
+- scenario_id: fixed_retry__http_500__20pct
+  reliability_strategy: fixed_retry
+  fault_type: http_500
+  fault_probability: 0.2
+  reliability_params: *id001
+- scenario_id: fixed_retry__http_500__25pct
+  reliability_strategy: fixed_retry
+  fault_type: http_500
+  fault_probability: 0.25
+  reliability_params: *id001
+- scenario_id: fixed_retry__timeout__10pct
+  reliability_strategy: fixed_retry
+  fault_type: timeout
+  fault_probability: 0.1
+  reliability_params: *id001
+- scenario_id: fixed_retry__timeout__20pct
+  reliability_strategy: fixed_retry
+  fault_type: timeout
+  fault_probability: 0.2
+  reliability_params: *id001
+- scenario_id: fixed_retry__timeout__25pct
+  reliability_strategy: fixed_retry
+  fault_type: timeout
+  fault_probability: 0.25
+  reliability_params: *id001
+- scenario_id: fixed_retry__malformed_json__10pct
+  reliability_strategy: fixed_retry
+  fault_type: malformed_json
+  fault_probability: 0.1
+  reliability_params: *id001
+- scenario_id: fixed_retry__malformed_json__20pct
+  reliability_strategy: fixed_retry
+  fault_type: malformed_json
+  fault_probability: 0.2
+  reliability_params: *id001
+- scenario_id: fixed_retry__malformed_json__25pct
+  reliability_strategy: fixed_retry
+  fault_type: malformed_json
+  fault_probability: 0.25
+  reliability_params: *id001
+- scenario_id: exponential_backoff__no_fault
+  reliability_strategy: exponential_backoff
+  fault_type: none
+  fault_probability: 0.0
+  reliability_params: &id002
+    max_attempts: 5
+    base_delay: 1.0
+    max_delay: 30.0
+    jitter_fraction: 0.1
+- scenario_id: exponential_backoff__http_429__10pct
+  reliability_strategy: exponential_backoff
+  fault_type: http_429
+  fault_probability: 0.1
+  reliability_params: *id002
+- scenario_id: exponential_backoff__http_429__20pct
+  reliability_strategy: exponential_backoff
+  fault_type: http_429
+  fault_probability: 0.2
+  reliability_params: *id002
+- scenario_id: exponential_backoff__http_429__25pct
+  reliability_strategy: exponential_backoff
+  fault_type: http_429
+  fault_probability: 0.25
+  reliability_params: *id002
+- scenario_id: exponential_backoff__http_500__10pct
+  reliability_strategy: exponential_backoff
+  fault_type: http_500
+  fault_probability: 0.1
+  reliability_params: *id002
+- scenario_id: exponential_backoff__http_500__20pct
+  reliability_strategy: exponential_backoff
+  fault_type: http_500
+  fault_probability: 0.2
+  reliability_params: *id002
+- scenario_id: exponential_backoff__http_500__25pct
+  reliability_strategy: exponential_backoff
+  fault_type: http_500
+  fault_probability: 0.25
+  reliability_params: *id002
+- scenario_id: exponential_backoff__timeout__10pct
+  reliability_strategy: exponential_backoff
+  fault_type: timeout
+  fault_probability: 0.1
+  reliability_params: *id002
+- scenario_id: exponential_backoff__timeout__20pct
+  reliability_strategy: exponential_backoff
+  fault_type: timeout
+  fault_probability: 0.2
+  reliability_params: *id002
+- scenario_id: exponential_backoff__timeout__25pct
+  reliability_strategy: exponential_backoff
+  fault_type: timeout
+  fault_probability: 0.25
+  reliability_params: *id002
+- scenario_id: exponential_backoff__malformed_json__10pct
+  reliability_strategy: exponential_backoff
+  fault_type: malformed_json
+  fault_probability: 0.1
+  reliability_params: *id002
+- scenario_id: exponential_backoff__malformed_json__20pct
+  reliability_strategy: exponential_backoff
+  fault_type: malformed_json
+  fault_probability: 0.2
+  reliability_params: *id002
+- scenario_id: exponential_backoff__malformed_json__25pct
+  reliability_strategy: exponential_backoff
+  fault_type: malformed_json
+  fault_probability: 0.25
+  reliability_params: *id002
+- scenario_id: checkpointing__no_fault
+  reliability_strategy: checkpointing
+  fault_type: none
+  fault_probability: 0.0
+  reliability_params: &id003
+    max_attempts: 5
+    base_delay: 1.0
+    max_delay: 30.0
+    jitter_fraction: 0.1
+- scenario_id: checkpointing__http_429__10pct
+  reliability_strategy: checkpointing
+  fault_type: http_429
+  fault_probability: 0.1
+  reliability_params: *id003
+- scenario_id: checkpointing__http_429__20pct
+  reliability_strategy: checkpointing
+  fault_type: http_429
+  fault_probability: 0.2
+  reliability_params: *id003
+- scenario_id: checkpointing__http_429__25pct
+  reliability_strategy: checkpointing
+  fault_type: http_429
+  fault_probability: 0.25
+  reliability_params: *id003
+- scenario_id: checkpointing__http_500__10pct
+  reliability_strategy: checkpointing
+  fault_type: http_500
+  fault_probability: 0.1
+  reliability_params: *id003
+- scenario_id: checkpointing__http_500__20pct
+  reliability_strategy: checkpointing
+  fault_type: http_500
+  fault_probability: 0.2
+  reliability_params: *id003
+- scenario_id: checkpointing__http_500__25pct
+  reliability_strategy: checkpointing
+  fault_type: http_500
+  fault_probability: 0.25
+  reliability_params: *id003
+- scenario_id: checkpointing__timeout__10pct
+  reliability_strategy: checkpointing
+  fault_type: timeout
+  fault_probability: 0.1
+  reliability_params: *id003
+- scenario_id: checkpointing__timeout__20pct
+  reliability_strategy: checkpointing
+  fault_type: timeout
+  fault_probability: 0.2
+  reliability_params: *id003
+- scenario_id: checkpointing__timeout__25pct
+  reliability_strategy: checkpointing
+  fault_type: timeout
+  fault_probability: 0.25
+  reliability_params: *id003
+- scenario_id: checkpointing__malformed_json__10pct
+  reliability_strategy: checkpointing
+  fault_type: malformed_json
+  fault_probability: 0.1
+  reliability_params: *id003
+- scenario_id: checkpointing__malformed_json__20pct
+  reliability_strategy: checkpointing
+  fault_type: malformed_json
+  fault_probability: 0.2
+  reliability_params: *id003
+- scenario_id: checkpointing__malformed_json__25pct
+  reliability_strategy: checkpointing
+  fault_type: malformed_json
+  fault_probability: 0.25
+  reliability_params: *id003
+
+# --- Interrupt-and-resume scenarios (audit fix #4) -------------------------
+# The scenarios above never simulate a process crash, so a fresh
+# CheckpointStore never has any prior state to resume from — in every one
+# of them, "checkpointing" is mechanically identical to
+# "exponential_backoff" plus the overhead of writing checkpoint markers.
+# That is an honest, disclosed finding, not a bug, and those scenarios are
+# left as-is. The three scenarios below are additive: each simulates a
+# process crash partway through a repetition (after 3 of 6 units, under
+# grid_points_limit: 2, no fault injection so interruption survival is the
+# only variable under test) and then reruns the full pass with the same
+# strategy/checkpoint store, so checkpointing's actual value proposition —
+# resuming without redoing completed work — is directly measurable via
+# api_calls and runtime_seconds, instead of asserted only by unit test.
+- scenario_id: baseline__interrupted
+  reliability_strategy: baseline
+  fault_type: none
+  fault_probability: 0.0
+  simulate_interruption_after_units: 3
+- scenario_id: exponential_backoff__interrupted
+  reliability_strategy: exponential_backoff
+  fault_type: none
+  fault_probability: 0.0
+  reliability_params: *id002
+  simulate_interruption_after_units: 3
+- scenario_id: checkpointing__interrupted
+  reliability_strategy: checkpointing
+  fault_type: none
+  fault_probability: 0.0
+  reliability_params: *id003
+  simulate_interruption_after_units: 3

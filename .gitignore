@@ -37,3 +37,13 @@ logs/
 
 # MLflow
 mlruns/
+
+# Test / tool caches
+.pytest_cache/
+
+# AI-assistant local files (never publish)
+.claude/
+CLAUDE.md
+
+# GridShield: heavy per-run artifacts are ignored by gridshield/.gitignore;
+# result summaries and plots under gridshield/outputs*/ are tracked.

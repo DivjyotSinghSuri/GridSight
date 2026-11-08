@@ -1,0 +1,35 @@
+# Experiment 4: Operational overhead.
+#
+# Measures the Runtime, Storage, and (best-effort) Memory cost GridShield's
+# machinery itself adds — reliability retries/checkpointing, and combined
+# Python + dbt validation — versus GridSight's baseline pipeline. Fault
+# injection is deliberately off (fault_probability: 0.0) for both arms, so
+# the difference measured is the instrumentation/validation overhead
+# alone, not confounded with time spent recovering from injected faults
+# (that comparison is Experiment 1's concern). See
+# gridshield/metrics/overhead_metrics.py for the columns this drives:
+# runtime_seconds, storage_bytes, peak_memory_bytes in statistics.csv.
+
+experiment_id: experiment_4_overhead
+defaults:
+  fault_type: none
+  fault_probability: 0.0
+  repetitions: 15
+  master_seed: 42
+  grid_points_limit: 2
+  run_date: "2026-07-25"
+scenarios:
+  - scenario_id: baseline_pipeline
+    reliability_strategy: baseline
+    validation_strategy: none
+
+  - scenario_id: gridshield_full
+    reliability_strategy: checkpointing
+    reliability_params:
+      max_attempts: 5
+      base_delay: 1.0
+      max_delay: 30.0
+      jitter_fraction: 0.1
+    validation_strategy: combined
+    validation_params:
+      inject_violation: none

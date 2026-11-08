@@ -1,0 +1,13 @@
+# dbt profile for GridShield's validation project.
+#
+# Points at GridShield's isolated DuckDB file via the GRIDSHIELD_DB_PATH
+# environment variable, which gridshield/wrappers/dbt_wrapper.py sets
+# before invoking `dbt`. Never points at GridSight's production database.
+
+gridshield:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('GRIDSHIELD_DB_PATH') }}"
+      threads: 1

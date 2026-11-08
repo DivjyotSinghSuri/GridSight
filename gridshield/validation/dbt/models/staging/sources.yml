@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: main
+    description: >
+      GridShield's isolated bronze tables, loaded by
+      gridshield/wrappers/bronze_load_wrapper.py::load_bronze_local()
+      from the local bronze_sim CSV tree. Mirrors GridSight's real bronze
+      layer (database/queries/daily/bronze_*.sql) but lives in GridShield's
+      own DuckDB file, never GridSight's production database. `schema: main`
+      because load_bronze_local() creates these tables unqualified, which
+      DuckDB places in its default "main" schema.
+    tables:
+      - name: bronze_weather
+      - name: bronze_irradiance
+      - name: bronze_daylight
+      - name: bronze_generation

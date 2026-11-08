@@ -1,0 +1,9 @@
+{
+  "daily": {
+    "time": ["2026-07-25"],
+    "sunrise": ["2026-07-25T05:12"],
+    "sunset": ["2026-07-25T21:04"],
+    "daylight_duration": [57120.0],
+    "sunshine_duration": [41230.5]
+  }
+}

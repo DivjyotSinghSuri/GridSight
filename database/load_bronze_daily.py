@@ -52,11 +52,7 @@ CREATE OR REPLACE SECRET gridsight_s3 (
 
     for table in tables:
 
-        count = conn.execute(
-
-            f"SELECT COUNT(*) FROM {table};"
-
-        ).fetchone()[0]
+        count = conn.execute(f"SELECT COUNT(*) FROM {table};").fetchone()[0]
 
         print(f"{table}: {count} rows")
 
